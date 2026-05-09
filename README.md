@@ -20,6 +20,11 @@ This version includes several fixes and improvements over the original:
 - **Fixed file extraction** commands (`.rar` → `.zip` where appropriate)
 - **Fixed inconsistent filenames** in download checks and extraction commands
 
+### Repository Customization (test branch)
+- **Added support for custom repositories** - you can now build from any fork of sm64ex
+- Configure `_repo_url` and `_repo_branch` in `customization.cfg`
+- Useful for testing patches or builds from community forks
+
 ### Why Links Were Updated
 The original PKGBUILD used Discord CDN links which are:
 - **Not permanent** - files can become unavailable if messages are deleted

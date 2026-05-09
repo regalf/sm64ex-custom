@@ -19,7 +19,14 @@ provides=(sm64ex)
 
 _gitname=sm64ex
 
-source=('git+https://github.com/sm64pc/sm64ex.git#branch=nightly')
+# Default repository settings - can be overridden in customization.cfg
+_repo_url="https://github.com/sm64pc/sm64ex.git"
+_repo_branch="nightly"
+
+# Source customization.cfg if it exists to allow overriding repo and other settings
+[ -f "./customization.cfg" ] && source "./customization.cfg"
+
+source=("${_gitname}::git+${_repo_url}#branch=${_repo_branch}")
 sha256sums=('SKIP')
 
 _where="$PWD"
@@ -115,6 +122,20 @@ _configure_options() {
                 rm -rf "${_EXT_CACHE_PATH:?}"/*
             fi
         fi
+    fi
+
+    if [ -z "$_repo_url" ]; then
+        printf "\tRepository URL [default: https://github.com/sm64pc/sm64ex.git]: "
+        printf "\n\t(Leave empty for default): "
+        read -r CHOICE
+        if [ -n "$CHOICE" ]; then
+            _repo_url="$CHOICE"
+            printf "\n\tRepository branch [default: nightly]: "
+            read -r CHOICE
+            _repo_branch="${CHOICE:-nightly}"
+            printf "\n\tNote: Repository changes require setting _repo_url in customization.cfg for future builds.\n"
+        fi
+        echo ""
     fi
 
     if [ -z "$_region" ]; then

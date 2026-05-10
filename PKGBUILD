@@ -249,12 +249,11 @@ _configure_options() {
         cp "$_rom_path" "$_where"/ && mv "$_where"/"$(basename "$_rom_path")" "$_where"/baserom."$_region".z64
     fi
 
-    (
-        cd "$srcdir/$_gitname" || exit
-        make clean
-        cp "$_where"/baserom."$_region".z64 ./
-        ./extract_assets.py $_region
-    )
+    pushd "$srcdir/$_gitname" >/dev/null || exit
+    make clean
+    cp "$_where"/baserom."$_region".z64 ./
+    ./extract_assets.py $_region
+    popd >/dev/null
 
     # ---- Build options (unchanged, these are make flags) ----
     if [ "$_discordrpc" = "1" ]; then
@@ -265,55 +264,52 @@ _configure_options() {
     fi
 
     # ---- Generic patch loop ----
-    (
-        cd "$srcdir/$_gitname" || exit
+    pushd "$srcdir/$_gitname" >/dev/null || exit
 
-        # 60fps: already in repo as enhancements/60fps_ex.patch
-        if echo "$_patches" | grep -qw "60fps_ex.patch"; then
-            git checkout -- enhancements/60fps_ex.patch 2>/dev/null || true
-            git apply ./enhancements/60fps_ex.patch --ignore-whitespace --reject || true
-        fi
+    # 60fps: already in repo as enhancements/60fps_ex.patch
+    if echo "$_patches" | grep -qw "60fps_ex.patch"; then
+        git checkout -- enhancements/60fps_ex.patch 2>/dev/null || true
+        git apply ./enhancements/60fps_ex.patch --ignore-whitespace --reject || true
+    fi
 
-        for _patch in $_patches; do
-            [ "$_patch" = "60fps_ex.patch" ] && continue
-            _download "$_patch" "$_PATCH_URL/$_patch" \
-                "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            git apply "./enhancements/$_patch" --ignore-whitespace --reject || true
-        done
-    )
+    for _patch in $_patches; do
+        [ "$_patch" = "60fps_ex.patch" ] && continue
+        _download "$_patch" "$_PATCH_URL/$_patch" \
+            "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
+        git apply "./enhancements/$_patch" --ignore-whitespace --reject || true
+    done
+    popd >/dev/null
 
     # ---- Generic HD model loop ----
-    (
-        cd "$srcdir/$_gitname" || exit
-        for _model in $_hd_models; do
-            _download "$_model" "$_MODEL_URL/$_model" \
-                "." "$_useCache" "$_EXT_CACHE_PATH"
-            _extract "$_model"
-            _model_post_process "$_model"
-        done
-    )
+    pushd "$srcdir/$_gitname" >/dev/null || exit
+    for _model in $_hd_models; do
+        _download "$_model" "$_MODEL_URL/$_model" \
+            "." "$_useCache" "$_EXT_CACHE_PATH"
+        _extract "$_model"
+        _model_post_process "$_model"
+    done
+    popd >/dev/null
 
     # ---- Mario model (filename-based) ----
     _mario_model_file=${_mario_model_file:-default}
     if [ "$_mario_model_file" != "default" ] && [ -n "$_mario_model_file" ]; then
-        (
-            cd "$srcdir/$_gitname" || exit
+        pushd "$srcdir/$_gitname" >/dev/null || exit
 
-            _download "$_mario_model_file" "$_MODEL_URL/$_mario_model_file" \
-                "." "$_useCache" "$_EXT_CACHE_PATH"
-            _extract "$_mario_model_file"
-            _model_post_process "$_mario_model_file"
+        _download "$_mario_model_file" "$_MODEL_URL/$_mario_model_file" \
+            "." "$_useCache" "$_EXT_CACHE_PATH"
+        _extract "$_mario_model_file"
+        _model_post_process "$_mario_model_file"
 
-            # Most Mario models need mario geo_header include
-            case $_mario_model_file in
-                hd_bowser.zip|hd_koopa_the_quick.zip|hd_peach_v2.zip) ;;
-                *)
-                    if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
-                        sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                    fi
-                    ;;
-            esac
-        )
+        # Most Mario models need mario geo_header include
+        case $_mario_model_file in
+            hd_bowser.zip|hd_koopa_the_quick.zip|hd_peach_v2.zip) ;;
+            *)
+                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
+                fi
+                ;;
+        esac
+        popd >/dev/null
     fi
 
     # ---- Texture pack ----
@@ -321,48 +317,44 @@ _configure_options() {
     _git_texture_packs=${_git_texture_packs:-}
 
     if [ "$_texture_pack" != "default" ] && [ -n "$_texture_pack" ]; then
-        (
-            cd "$srcdir/$_gitname" || exit
+        pushd "$srcdir/$_gitname" >/dev/null || exit
 
-            # Check if it's a git-based texture pack
-            _git_info=$(_GIT_TEXTURE_MAP "$_texture_pack" 2>/dev/null) && {
-                # Git-based: parse _GIT_TEXTURE_MAP output
-                eval set -- $_git_info
-                _clone "$_useCache" "$_EXT_CACHE_PATH" "$1" "$2" "$3" "$4" "$5"
-            } || {
-                # Direct download from sm64pc.info
-                _download "$_texture_pack" "$_TEXTURE_URL/$_texture_pack" \
-                    "." "$_useCache" "$_EXT_CACHE_PATH"
-                case $_texture_pack in
-                    *.zip)
-                        if unzip -l "$_texture_pack" 2>/dev/null | grep -qi "gfx\|actors\|texture"; then
-                            _extract "$_texture_pack"
-                        fi
-                        install -Dm755 "$_texture_pack" build/"$_region"_pc/res/"$_texture_pack"
-                        ;;
-                    *.pak)
-                        install -Dm755 "$_texture_pack" build/"$_region"_pc/res/"$_texture_pack"
-                        ;;
-                esac
-            }
-            _external_data=1
-        )
+        # Check if it's a git-based texture pack
+        _git_info=$(_GIT_TEXTURE_MAP "$_texture_pack" 2>/dev/null) && {
+            eval set -- $_git_info
+            _clone "$_useCache" "$_EXT_CACHE_PATH" "$1" "$2" "$3" "$4" "$5"
+        } || {
+            _download "$_texture_pack" "$_TEXTURE_URL/$_texture_pack" \
+                "." "$_useCache" "$_EXT_CACHE_PATH"
+            case $_texture_pack in
+                *.zip)
+                    if unzip -l "$_texture_pack" 2>/dev/null | grep -qi "gfx\|actors\|texture"; then
+                        _extract "$_texture_pack"
+                    fi
+                    install -Dm755 "$_texture_pack" build/"$_region"_pc/res/"$_texture_pack"
+                    ;;
+                *.pak)
+                    install -Dm755 "$_texture_pack" build/"$_region"_pc/res/"$_texture_pack"
+                    ;;
+            esac
+        }
+        _external_data=1
+        popd >/dev/null
     fi
 
-    # Additional git-based texture packs (deprecated: use _texture_pack with git names instead)
+    # Additional git-based texture packs
     if [ -n "$_git_texture_packs" ]; then
-        (
-            cd "$srcdir/$_gitname" || exit
-            for _gtp in $_git_texture_packs; do
-                _git_info=$(_GIT_TEXTURE_MAP "$_gtp" 2>/dev/null) || {
-                    echo "Warning: unknown git texture pack '$_gtp', skipping"
-                    continue
-                }
-                eval set -- $_git_info
-                _clone "$_useCache" "$_EXT_CACHE_PATH" "$1" "$2" "$3" "$4" "$5"
-            done
-            _external_data=1
-        )
+        pushd "$srcdir/$_gitname" >/dev/null || exit
+        for _gtp in $_git_texture_packs; do
+            _git_info=$(_GIT_TEXTURE_MAP "$_gtp" 2>/dev/null) || {
+                echo "Warning: unknown git texture pack '$_gtp', skipping"
+                continue
+            }
+            eval set -- $_git_info
+            _clone "$_useCache" "$_EXT_CACHE_PATH" "$1" "$2" "$3" "$4" "$5"
+        done
+        _external_data=1
+        popd >/dev/null
     fi
 
     # ---- Bitness ----

@@ -48,7 +48,7 @@ This package is **not available on AUR** because:
 
 ```bash
 # Clone this repository
-git clone https://github.com/regaldragoon200/sm64ex-custom.git
+git clone https://github.com/regalf/sm64ex-custom.git
 cd sm64ex-custom
 
 # Place your ROM in the build directory

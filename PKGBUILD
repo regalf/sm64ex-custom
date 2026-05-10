@@ -1,5 +1,6 @@
 # Maintainer: Brian Allred brian.d.allred<AT>gmail.com
-# Simplified non-interactive version
+# Modular non-interactive version
+# Resources are driven by customization.cfg lists, not hardcoded individually.
 
 pkgname=sm64ex-custom-git
 pkgrel=1
@@ -24,6 +25,41 @@ source=('git+https://github.com/sm64pc/sm64ex.git#branch=nightly')
 sha256sums=('SKIP')
 
 _where="$PWD"
+
+# ---- Base URLs for sm64pc.info resources ----
+_PATCH_URL="https://sm64pc.info/downloads/patches"
+_MODEL_URL="https://sm64pc.info/downloads/model_pack"
+_TEXTURE_URL="https://sm64pc.info/downloads/texture_pack"
+
+# ---- Git-based texture packs: name -> "url branch checkoutPath zipName subdir" ----
+_GIT_TEXTURE_MAP() {
+    case $1 in
+        sm64_redrawn)
+            echo "https://github.com/TechieAndroid/sm64redrawn.git '' sm64redrawn sm64redrawn.zip gfx"
+            ;;
+        resrgan_16x)
+            echo "https://github.com/pokeheadroom/RESRGAN-16xre-upscale-HD-texture-pack.git '' resrgan_16x resrgan.zip gfx"
+            ;;
+        resrgan_n64)
+            echo "https://github.com/pokeheadroom/RESRGAN-16xre-upscale-HD-texture-pack.git n64-resrgan-faithful resrgan_n64 resrgan_n64.zip gfx"
+            ;;
+        p3st)
+            echo "https://github.com/p3st-textures/p3st-Texture_pack.git '' p3st p3st-textures.zip gfx p3st-sound.zip sound"
+            ;;
+        minecraft)
+            echo "git://github.com/Almondatchy3/MCtexturepackSM64 '' minecraft minecraft.zip gfx"
+            ;;
+        jappawakka_admentus_hd)
+            echo "git://github.com/JappaWakka/Mario64HDTexturePack_PC '' jappawakka_admentus_hd jappawakka_admentus_hd.zip gfx"
+            ;;
+        cleaner)
+            echo "https://github.com/CrashCrod/Cleaner-Aesthetics.git '' cleaner cleaner.zip gfx"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
 
 _download() {
     _fileName=$1
@@ -81,19 +117,126 @@ _clone() {
     cd "$_wd" || exit
 }
 
+# ---- Extract archive based on extension ----
+_extract() {
+    _file=$1
+    _dest=${2:-.}
+    case $_file in
+        *.zip) unzip -o "$_file" -d "$_dest" ;;
+        *.7z)  7z x -y "$_file" -o"$_dest" ;;
+        *.rar) unrar x -o+ "$_file" "$_dest" ;;
+        *.tar.gz|*.tar.xz) tar xf "$_file" -C "$_dest" ;;
+    esac
+}
+
+# ---- Post-processing for specific models ----
+# Each case runs additional steps needed by certain model packs.
+_model_post_process() {
+    _model_file=$1
+    case $_model_file in
+        hd_koopa_the_quick.zip)
+            if ! grep -q '#include "koopa_shell/geo_header.h"' "./actors/common0.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "koopa_shell/geo_header.h"' ./actors/common0.h
+            fi
+            if ! grep -q '#include "koopa/geo_header.h"' "./actors/group14.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "koopa/geo_header.h"' ./actors/group14.h
+            fi
+            ;;
+        hd_peach_v2.zip)
+            install -Dm755 peach_hd_textures.zip build/"$_region"_pc/res/peach_hd_textures.zip 2>/dev/null || true
+            if ! grep -q '#include "peach/geo_header.h"' "./actors/group10.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "peach/geo_header.h"' ./actors/group10.h
+            fi
+            _external_data=1
+            ;;
+        hat_kid.rar|hat_kid_v2.1.zip)
+            install -Dm755 hat_kid_textures_sounds.zip build/"$_region"_pc/res/hat_kid_textures_sounds.zip 2>/dev/null || true
+            _add_cap_includes
+            ;;
+        bow_kid.rar|bow_kid_v2.1.zip)
+            install -Dm755 bow_kid_textures_sounds.zip build/"$_region"_pc/res/bow_kid_textures_sounds.zip 2>/dev/null || true
+            _add_cap_includes
+            ;;
+        odyssey_mario.zip)
+            if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
+            fi
+            if ! grep -q '#include "mario_cap/geo_header.h"' "./actors/common1.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "mario_cap/geo_header.h"' ./actors/common1.h
+            fi
+            ;;
+        luigi.zip)
+            if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
+            fi
+            ;;
+        mawio.zip)
+            if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
+            fi
+            ;;
+        old_school_hd_mario.zip)
+            if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
+            fi
+            ;;
+        beta_mario.zip)
+            if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
+            fi
+            ;;
+    esac
+}
+
+_add_cap_includes() {
+    for _f in \
+        'mario/geo_header.h:actors/group0.h' \
+        'goomba/geo_header.h:actors/common0.h' \
+        'mario_cap/geo_header.h:actors/common1.h' \
+        'mario_metal_cap/model.inc.c:actors/common1.c' \
+        'mario_metal_cap/geo_header.h:actors/common1.h' \
+        'mario_metal_cap/geo.inc.c:actors/common1_geo.c' \
+        'mario_wing_cap/model.inc.c:actors/common1.c' \
+        'mario_wing_cap/geo_header.h:actors/common1.h' \
+        'mario_wing_cap/geo.inc.c:actors/common1_geo.c' \
+        'mario_winged_metal_cap/model.inc.c:actors/common1.c' \
+        'mario_winged_metal_cap/geo_header.h:actors/common1.h' \
+        'mario_winged_metal_cap/geo.inc.c:actors/common1_geo.c' \
+        'star/geo_header.h:actors/common1.h' \
+        'transparent_star/geo_header.h:actors/common1.h'; do
+        _include="${_f%%:*}"
+        _file="${_f##*:}"
+        if ! grep -q "#include \"$_include\"" "$_file" 2>/dev/null; then
+            sed -i '/#endif/i #include "'"$_include"'"' "$_file"
+        fi
+    done
+    for _pattern in \
+        'mario_metal_cap:Makefile.split:mario_cap*:mario_cap mario_metal_cap' \
+        'mario_wing_cap:Makefile.split:mario_metal_cap*:mario_metal_cap mario_wing_cap' \
+        'mario_winged_metal_cap:Makefile.split:mario_wing_cap*:mario_wing_cap mario_winged_metal_cap'; do
+        _cap="${_pattern%%:*}"
+        _rest="${_pattern#*:}"
+        _mkfile="${_rest%%:*}"
+        _rest2="${_rest#*:}"
+        _old="${_rest2%%:*}"
+        _new="${_rest2##*:}"
+        if ! grep -q "$_cap" "$_mkfile" 2>/dev/null; then
+            sed -i "s/$_old/$_new/g" "$_mkfile"
+        fi
+    done
+}
+
 _configure_options() {
-    source "$_where"/customization.cfg
+    # ---- Load config ----
+    [ -f "$_where/customization.cfg" ] && source "$_where/customization.cfg"
+    [ -f "$_EXT_CONFIG_PATH" ] && source "$_EXT_CONFIG_PATH"
 
-    if [ -e "$_EXT_CONFIG_PATH" ]; then
-        source "$_EXT_CONFIG_PATH"
-    fi
-
-    # Defaults
+    # ---- Defaults ----
     _EXT_CACHE_PATH=${_EXT_CACHE_PATH:-~/.cache/sm64ex-custom}
     _EXT_CONFIG_PATH=${_EXT_CONFIG_PATH:-~/.config/sm64ex-custom/config}
-
-    # Cache
     _useCache=${_useCache:-0}
+    _region=${_region:-us}
+
     if [ "$_useCache" = "1" ]; then
         mkdir -p "$_EXT_CACHE_PATH"
     fi
@@ -101,437 +244,136 @@ _configure_options() {
         rm -rf "${_EXT_CACHE_PATH}"/*
     fi
 
-    # Region
-    _region=${_region:-us}
-
-    # ROM
+    # ---- ROM ----
     if [ ! -e "$_where"/baserom."$_region".z64 ] && [ -n "$_rom_path" ]; then
         cp "$_rom_path" "$_where"/ && mv "$_where"/"$(basename "$_rom_path")" "$_where"/baserom."$_region".z64
     fi
 
     (
         cd "$srcdir/$_gitname" || exit
-
         make clean
-
         cp "$_where"/baserom."$_region".z64 ./
         ./extract_assets.py $_region
     )
 
-    # ---- Options (from config, no prompts) ----
-    # bettercamera, debug, nodrawingdistance, texture_fix, external_data
-    # discordrpc, windows_build, windows_console, textsaves, target_web
-
-    # Discord RPC forces 64-bit
+    # ---- Build options (unchanged, these are make flags) ----
     if [ "$_discordrpc" = "1" ]; then
         _target_bits=64
     fi
-
-    # Windows console forces windows build
     if [ "$_windows_console" = "1" ]; then
         _windows_build=1
     fi
 
-    # ---- Apply patches ----
+    # ---- Generic patch loop ----
     (
         cd "$srcdir/$_gitname" || exit
 
-        if [ "$_60fps" = "1" ]; then
-            git checkout -- enhancements/60fps_ex.patch
+        # 60fps: already in repo as enhancements/60fps_ex.patch
+        if echo "$_patches" | grep -qw "60fps_ex.patch"; then
+            git checkout -- enhancements/60fps_ex.patch 2>/dev/null || true
             git apply ./enhancements/60fps_ex.patch --ignore-whitespace --reject || true
         fi
 
-        if [ "$_no_exit_star" = "1" ]; then
-            if [ ! -e "./enhancements/nonstop_mode_always_enabled.patch" ]; then
-                _download nonstop_mode_always_enabled.patch \
-                    https://sm64pc.info/downloads/patches/nonstop_mode_always_enabled.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/nonstop_mode_always_enabled.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_tight_controls" = "1" ]; then
-            if [ ! -e "./enhancements/tight_controls.patch" ]; then
-                _download tight_controls.patch \
-                    https://sm64pc.info/downloads/patches/tight_controls.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/tight_controls.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_captain_toad" = "1" ]; then
-            if [ ! -e "./enhancements/captain_toad_stars.patch" ]; then
-                _download captain_toad_stars.patch \
-                    https://sm64pc.info/downloads/patches/captain_toad_stars.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/captain_toad_stars.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_title_return" = "1" ]; then
-            if [ ! -e "./enhancements/leave_game.patch" ]; then
-                _download leave_game.patch \
-                    https://sm64pc.info/downloads/patches/leave_game.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/go_back_to_title_from_ending_nightly.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_3d_coin" = "1" ]; then
-            if [ ! -e "./enhancements/3d_coin_v2_nightly.patch" ]; then
-                _download 3d_coin_v2_nightly.patch \
-                    https://sm64pc.info/downloads/patches/3d_coin_v2_nightly.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/3d_coin_v2_nightly.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_exit_50_coin" = "1" ]; then
-            if [ ! -e "./enhancements/exit_course_50_coin_fix.patch" ]; then
-                _download exit_course_50_coin_fix.patch \
-                    https://sm64pc.info/downloads/patches/exit_course_50_coin_fix.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/exit_course_50_coin_fix.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_title_exit" = "1" ]; then
-            if [ ! -e "./enhancements/Added-exit-button.patch" ]; then
-                _download Added-exit-button.patch \
-                    https://sm64pc.info/downloads/patches/Added-exit-button.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/Added-exit-button.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_star_delay" = "1" ]; then
-            if [ ! -e "./enhancements/increase_delay_on_star_select.patch" ]; then
-                _download increase_delay_on_star_select.patch \
-                    https://sm64pc.info/downloads/patches/increase_delay_on_star_select.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/increase_delay_on_star_select.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_time_trial" = "1" ]; then
-            if [ ! -e "./enhancements/time_trials.2.3.patch" ]; then
-                _download time_trials.2.3.patch \
-                    https://sm64pc.info/downloads/patches/time_trials.2.3.patch \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            git apply ./enhancements/time_trials.patch --ignore-whitespace --reject || true
-        fi
-
-        if [ "$_odyssey_moveset" = "1" ]; then
-            if [ ! -e "./enhancements/smo.1.0.1.patch" ]; then
-                _download odyssey_mario.zip \
-                    https://sm64pc.info/downloads/model_pack/odyssey_mario.zip \
-                    "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
-                unzip -o enhancements/odyssey_mario.zip
-            fi
-            git apply ./enhancements/smo.1.0.1.patch --ignore-whitespace --reject || true
-        fi
+        for _patch in $_patches; do
+            [ "$_patch" = "60fps_ex.patch" ] && continue
+            _download "$_patch" "$_PATCH_URL/$_patch" \
+                "./enhancements" "$_useCache" "$_EXT_CACHE_PATH"
+            git apply "./enhancements/$_patch" --ignore-whitespace --reject || true
+        done
     )
 
-    # ---- HD Models ----
+    # ---- Generic HD model loop ----
     (
         cd "$srcdir/$_gitname" || exit
-
-        if [ "$_hd_bowser" = "1" ]; then
-            if [ ! -e "hd_bowser.zip" ]; then
-                _download hd_bowser.zip \
-                    https://sm64pc.info/downloads/model_pack/hd_bowser.zip \
-                    "." "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            unzip -o hd_bowser.zip
-        fi
-
-        if [ "$_hd_koopa" = "1" ]; then
-            if [ ! -e "koopa_the_quick.zip" ]; then
-                _download hd_koopa_the_quick.zip \
-                    https://sm64pc.info/downloads/model_pack/hd_koopa_the_quick.zip \
-                    "." "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            unzip -o koopa_the_quick.zip
-            if ! grep -q '#include "koopa_shell/geo_header.h"' "./actors/common0.h"; then
-                sed -i '/#endif/i #include "koopa_shell/geo_header.h"' ./actors/common0.h
-            fi
-            if ! grep -q '#include "koopa/geo_header.h"' "./actors/group14.h"; then
-                sed -i '/#endif/i #include "koopa/geo_header.h"' ./actors/group14.h
-            fi
-        fi
-
-        if [ "$_hd_peach" = "1" ]; then
-            if [ ! -e "peach.zip" ]; then
-                _download hd_peach_v2.zip \
-                    https://sm64pc.info/downloads/model_pack/hd_peach_v2.zip \
-                    "." "$_useCache" "$_EXT_CACHE_PATH"
-            fi
-            unzip -o peach.zip
-            install -Dm755 peach_hd_textures.zip build/"$_region"_pc/res/peach_hd_textures.zip
-            if ! grep -q '#include "peach/geo_header.h"' "./actors/group10.h"; then
-                sed -i '/#endif/i #include "peach/geo_header.h"' ./actors/group10.h
-            fi
-            _external_data=1
-        fi
+        for _model in $_hd_models; do
+            _download "$_model" "$_MODEL_URL/$_model" \
+                "." "$_useCache" "$_EXT_CACHE_PATH"
+            _extract "$_model"
+            _model_post_process "$_model"
+        done
     )
 
-    # Mario Model
-    _mario_model=${_mario_model:-default}
-
-    if [ "$_mario_model" != default ]; then
+    # ---- Mario model (filename-based) ----
+    _mario_model_file=${_mario_model_file:-default}
+    if [ "$_mario_model_file" != "default" ] && [ -n "$_mario_model_file" ]; then
         (
             cd "$srcdir/$_gitname" || exit
 
-            if [ "$_mario_model" = hd_mario ]; then
-                if [ ! -e "hd_mario_v2.zip" ]; then
-                    _download hd_mario_v2.zip \
-                        https://sm64pc.info/downloads/model_pack/hd_mario_v2.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o hd_mario_v2.zip
-            fi
+            _download "$_mario_model_file" "$_MODEL_URL/$_mario_model_file" \
+                "." "$_useCache" "$_EXT_CACHE_PATH"
+            _extract "$_mario_model_file"
+            _model_post_process "$_mario_model_file"
 
-            if [ "$_mario_model" = luigi ]; then
-                if [ ! -e "luigi.zip" ]; then
-                    _download luigi.zip \
-                        https://sm64pc.info/downloads/model_pack/luigi.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o luigi.zip
-                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h"; then
-                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                fi
-            fi
-
-            if [ "$_mario_model" = hat_kid ] || [ "$_mario_model" = bow_kid ]; then
-                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h"; then
-                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                fi
-                if ! grep -q '#include "goomba/geo_header.h"' "./actors/common0.h"; then
-                    sed -i '/#endif/i #include "goomba/geo_header.h"' ./actors/common0.h
-                fi
-                if ! grep -q '#include "mario_cap/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "mario_cap/geo_header.h"' ./actors/common1.h
-                fi
-                if ! grep -q '#include "mario_metal_cap/model.inc.c"' "./actors/common1.c"; then
-                    sed -i '/#endif/i #include "mario_metal_cap/model.inc.c"' ./actors/common1.c
-                fi
-                if ! grep -q '#include "mario_metal_cap/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "mario_metal_cap/geo_header.h"' ./actors/common1.h
-                fi
-                if ! grep -q '#include "mario_metal_cap/geo.inc.c"' "./actors/common1_geo.c"; then
-                    sed -i '/#endif/i #include "mario_metal_cap/geo.inc.c"' ./actors/common1_geo.c
-                fi
-                if ! grep -q '#include "mario_wing_cap/model.inc.c"' "./actors/common1.c"; then
-                    sed -i '/#endif/i #include "mario_wing_cap/model.inc.c"' ./actors/common1.c
-                fi
-                if ! grep -q '#include "mario_wing_cap/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "mario_wing_cap/geo_header.h"' ./actors/common1.h
-                fi
-                if ! grep -q '#include "mario_wing_cap/geo.inc.c"' "./actors/common1_geo.c"; then
-                    sed -i '/#endif/i #include "mario_wing_cap/geo.inc.c"' ./actors/common1_geo.c
-                fi
-                if ! grep -q '#include "mario_winged_metal_cap/model.inc.c"' "./actors/common1.c"; then
-                    sed -i '/#endif/i #include "mario_winged_metal_cap/model.inc.c"' ./actors/common1.c
-                fi
-                if ! grep -q '#include "mario_winged_metal_cap/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "mario_winged_metal_cap/geo_header.h"' ./actors/common1.h
-                fi
-                if ! grep -q '#include "mario_winged_metal_cap/geo.inc.c"' "./actors/common1_geo.c"; then
-                    sed -i '/#endif/i #include "mario_winged_metal_cap/geo.inc.c"' ./actors/common1_geo.c
-                fi
-                if ! grep -q '#include "star/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "star/geo_header.h"' ./actors/common1.h
-                fi
-                if ! grep -q '#include "transparent_star/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "transparent_star/geo_header.h"' ./actors/common1.h
-                fi
-                if ! grep -q 'mario_metal_cap' "Makefile.split"; then
-                    sed -i 's/mario_cap*/mario_cap mario_metal_cap/g' Makefile.split
-                fi
-                if ! grep -q 'mario_wing_cap' "Makefile.split"; then
-                    sed -i 's/mario_metal_cap*/mario_metal_cap mario_wing_cap/g' Makefile.split
-                fi
-                if ! grep -q 'mario_winged_metal_cap' "Makefile.split"; then
-                    sed -i 's/mario_wing_cap*/mario_wing_cap mario_winged_metal_cap/g' Makefile.split
-                fi
-
-                if [ "$_mario_model" = hat_kid ]; then
-                    if [ ! -e "hat_kid.rar" ]; then
-                        _download hat_kid.rar \
-                            https://sm64pc.info/downloads/model_pack/hat_kid.rar \
-                            "." "$_useCache" "$_EXT_CACHE_PATH"
+            # Most Mario models need mario geo_header include
+            case $_mario_model_file in
+                hd_bowser.zip|hd_koopa_the_quick.zip|hd_peach_v2.zip) ;;
+                *)
+                    if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h" 2>/dev/null; then
+                        sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
                     fi
-                    unrar x -o+ ./hat_kid.rar
-                    install -Dm755 hat_kid_textures_sounds.zip build/"$_region"_pc/res/hat_kid_textures_sounds.zip
-                fi
-
-                if [ "$_mario_model" = bow_kid ]; then
-                    if [ ! -e "bow_kid.rar" ]; then
-                        _download bow_kid.rar \
-                            https://sm64pc.info/downloads/model_pack/bow_kid.rar \
-                            "." "$_useCache" "$_EXT_CACHE_PATH"
-                    fi
-                    unrar x -o+ ./bow_kid.rar
-                    install -Dm755 bow_kid_textures_sounds.zip build/"$_region"_pc/res/bow_kid_textures_sounds.zip
-                fi
-            fi
-
-            if [ "$_mario_model" = mawio ]; then
-                if [ ! -e "mawio.zip" ]; then
-                    _download mawio.zip \
-                        https://sm64pc.info/downloads/model_pack/mawio.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o mawio.zip
-                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h"; then
-                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                fi
-            fi
-
-            if [ "$_mario_model" = odyssey_mario ]; then
-                if [ ! -e "odyssey_mario.zip" ]; then
-                    _download odyssey_mario.zip \
-                        https://sm64pc.info/downloads/model_pack/odyssey_mario.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o odyssey_mario.zip
-                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h"; then
-                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                fi
-                if ! grep -q '#include "mario_cap/geo_header.h"' "./actors/common1.h"; then
-                    sed -i '/#endif/i #include "mario_cap/geo_header.h"' ./actors/common1.h
-                fi
-            fi
-
-            if [ "$_mario_model" = old_school_hd_mario ]; then
-                if [ ! -e "old_school_hd_mario.zip" ]; then
-                    _download old_school_hd_mario.zip \
-                        https://sm64pc.info/downloads/model_pack/old_school_hd_mario.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o old_school_hd_mario.zip
-                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h"; then
-                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                fi
-            fi
-
-            if [ "$_mario_model" = beta_mario ]; then
-                if [ ! -e "beta_mario.zip" ]; then
-                    _download beta_mario.zip \
-                        https://sm64pc.info/downloads/model_pack/beta_mario.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o beta_mario.zip
-                if ! grep -q '#include "mario/geo_header.h"' "./actors/group0.h"; then
-                    sed -i '/#endif/i #include "mario/geo_header.h"' ./actors/group0.h
-                fi
-            fi
+                    ;;
+            esac
         )
     fi
 
-    # Texture Pack
+    # ---- Texture pack ----
     _texture_pack=${_texture_pack:-default}
+    _git_texture_packs=${_git_texture_packs:-}
 
-    if [ "$_texture_pack" != default ]; then
+    if [ "$_texture_pack" != "default" ] && [ -n "$_texture_pack" ]; then
         (
             cd "$srcdir/$_gitname" || exit
 
-            if [ "$_texture_pack" = mollymutt ]; then
-                if [ ! -e "mollymutt.zip" ]; then
-                    _download mollymutt.zip \
-                        https://sm64pc.info/downloads/texture_pack/mollymutt.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                install -Dm755 mollymutt.zip build/"$_region"_pc/res/mollymutt.zip
-            fi
-
-            if [ "$_texture_pack" = hypatia ]; then
-                if [ ! -e "hypatia.zip" ]; then
-                    _download hypatia.zip \
-                        https://sm64pc.info/downloads/hypatia.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                install -Dm755 hypatia.zip build/"$_region"_pc/res/hypatia.zip
-            fi
-
-            if [ "$_texture_pack" = sm64_redrawn ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    https://github.com/TechieAndroid/sm64redrawn.git "" \
-                    sm64redrawn sm64redrawn.zip gfx
-            fi
-
-            if [ "$_texture_pack" = resrgan_16x ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    https://github.com/pokeheadroom/RESRGAN-16xre-upscale-HD-texture-pack.git "" \
-                    resrgan_16x resrgan.zip gfx
-            fi
-
-            if [ "$_texture_pack" = resrgan_n64 ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    https://github.com/pokeheadroom/RESRGAN-16xre-upscale-HD-texture-pack.git n64-resrgan-faithful \
-                    resrgan_n64 resrgan_n64.zip gfx
-            fi
-
-            if [ "$_texture_pack" = p3st ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    https://github.com/p3st-textures/p3st-Texture_pack.git "" \
-                    p3st p3st-textures.zip gfx p3st-sound.zip sound
-            fi
-
-            if [ "$_texture_pack" = minecraft ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    git://github.com/Almondatchy3/MCtexturepackSM64 "" \
-                    minecraft minecraft.zip gfx
-            fi
-
-            if [ "$_texture_pack" = jappawakka_admentus_hd ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    git://github.com/JappaWakka/Mario64HDTexturePack_PC "" \
-                    jappawakka_admentus_hd jappawakka_admentus_hd.zip gfx
-            fi
-
-            if [ "$_texture_pack" = cleaner ]; then
-                _clone "$_useCache" "$_EXT_CACHE_PATH" \
-                    https://github.com/CrashCrod/Cleaner-Aesthetics.git "" \
-                    cleaner cleaner.zip gfx
-            fi
-
-            if [ "$_texture_pack" = owo ]; then
-                if [ ! -e "owo.zip" ]; then
-                    _download owo.zip \
-                        https://sm64pc.info/downloads/texture_pack/owo.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                install -Dm755 owo.zip build/"$_region"_pc/res/owo.zip
-            fi
-
-            if [ "$_texture_pack" = beta_hud ]; then
-                if [ ! -e "beta_hud.zip" ]; then
-                    _download beta_hud.zip \
-                        https://sm64pc.info/downloads/texture_pack/beta_hud.zip \
-                        "." "$_useCache" "$_EXT_CACHE_PATH"
-                fi
-                unzip -o beta_hud.zip
-                install -Dm755 beta_hud.zip build/"$_region"_pc/res/beta_hud.zip
-            fi
-
+            # Check if it's a git-based texture pack
+            _git_info=$(_GIT_TEXTURE_MAP "$_texture_pack" 2>/dev/null) && {
+                # Git-based: parse _GIT_TEXTURE_MAP output
+                eval set -- $_git_info
+                _clone "$_useCache" "$_EXT_CACHE_PATH" "$1" "$2" "$3" "$4" "$5"
+            } || {
+                # Direct download from sm64pc.info
+                _download "$_texture_pack" "$_TEXTURE_URL/$_texture_pack" \
+                    "." "$_useCache" "$_EXT_CACHE_PATH"
+                case $_texture_pack in
+                    *.zip)
+                        if unzip -l "$_texture_pack" 2>/dev/null | grep -qi "gfx\|actors\|texture"; then
+                            _extract "$_texture_pack"
+                        fi
+                        install -Dm755 "$_texture_pack" build/"$_region"_pc/res/"$_texture_pack"
+                        ;;
+                    *.pak)
+                        install -Dm755 "$_texture_pack" build/"$_region"_pc/res/"$_texture_pack"
+                        ;;
+                esac
+            }
             _external_data=1
         )
     fi
 
-    # Bitness
-    if [ "$_target_bits" = default ]; then
+    # Additional git-based texture packs (deprecated: use _texture_pack with git names instead)
+    if [ -n "$_git_texture_packs" ]; then
+        (
+            cd "$srcdir/$_gitname" || exit
+            for _gtp in $_git_texture_packs; do
+                _git_info=$(_GIT_TEXTURE_MAP "$_gtp" 2>/dev/null) || {
+                    echo "Warning: unknown git texture pack '$_gtp', skipping"
+                    continue
+                }
+                eval set -- $_git_info
+                _clone "$_useCache" "$_EXT_CACHE_PATH" "$1" "$2" "$3" "$4" "$5"
+            done
+            _external_data=1
+        )
+    fi
+
+    # ---- Bitness ----
+    if [ "$_target_bits" = "default" ]; then
         _target_bits=
     fi
 
-    # Render API
     _render_api=${_render_api:-GL}
 
-    # Build OPTIONS string
+    # ---- Build _OPTIONS string ----
     _OPTIONS="VERSION=$_region"
-
     if [ -n "$_target_bits" ]; then
         _OPTIONS="$_OPTIONS TARGET_BITS=$_target_bits"
     fi

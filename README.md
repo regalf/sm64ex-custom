@@ -28,6 +28,33 @@ The original PKGBUILD used Discord CDN links which are:
 
 All links now point to `sm64pc.info` which hosts these files permanently.
 
+## Non-Interactive Branch
+
+The `pkgbuild-no-interactive` branch provides a stripped-down PKGBUILD with **no interactive menus**.
+It reads all options exclusively from `customization.cfg`, making it ideal for automated/scripted builds.
+
+```bash
+git checkout pkgbuild-no-interactive
+```
+
+Configure everything via `customization.cfg`:
+
+```bash
+_region=us
+_rom_path=/path/to/baserom.us.z64
+_useCache=1
+
+_bettercamera=1
+_60fps=1
+_external_data=1
+_mario_model=hd_mario
+_texture_pack=mollymutt
+_render_api=GL
+```
+
+No prompts will appear during the build — perfect for CI, scripts, or users who prefer
+declarative configuration over interactive menus.
+
 ## Why not on AUR?
 
 This package is **not available on AUR** because:

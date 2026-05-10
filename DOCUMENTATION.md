@@ -99,12 +99,16 @@ pkgbuild/
 └── SuperMario64.png
 ```
 
-**When to use:** Experimental — if you want to test the new modular
-system. Not yet tested with a real build.
+**When to use:** This branch is the **backend** of the Sm64exBuilder
+GUI — the builder handles `resources.db` updates and config generation
+automatically. **Not recommended for manual use without the builder.**
+
+> **Note:** This branch is designed to be driven exclusively by the
+> builder. Manual `makepkg -si` is not advised.
 
 ```
 git checkout modular-experimental
-makepkg -si
+# Use the builder GUI instead
 ```
 
 ---

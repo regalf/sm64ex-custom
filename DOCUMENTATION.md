@@ -244,23 +244,23 @@ PKGBUILD has been configured to use them (see `_configure_options()`).
 
 Two versions of the graphical builder exist:
 
-### Sm64exBuilder (`~/Progetti/Sm64exBuilder/`)
+### Sm64exBuilder
 
 - wxPython interface with a 5-tab notebook
 - Generates `customization.cfg` and launches `makepkg -si`
 - Uses the `pkgbuild-no-interactive` branch
 - 473 lines
 
-### Sm64exBuilderModulare (`~/Progetti/Sm64exBuilderModulare/`)
+### Sm64exBuilderModulare
 
 - Modular version (638 lines)
 - Parses `resources.db` instead of HTML
 - Search bar for patches and models
 - Dynamic update from GitHub
-- Selectable branch (modular-experimental / pkgbuild-no-interactive / master)
+- Uses the `modular-experimental` branch
 
 ```bash
-python3 ~/Progetti/Sm64exBuilderModulare/builder/sm64ex-builder.py
+python3 /path/to/Sm64exBuilderModulare/builder/sm64ex-builder.py
 ```
 
 ---

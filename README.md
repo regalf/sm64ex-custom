@@ -28,6 +28,8 @@ The original PKGBUILD used Discord CDN links which are:
 
 All links now point to `sm64pc.info` which hosts these files permanently.
 
+For detailed documentation about all branches, PKGBUILD internals, configuration options, and the GUI builder, see [DOCUMENTATION.md](DOCUMENTATION.md).
+
 ## Why not on AUR?
 
 This package is **not available on AUR** because:

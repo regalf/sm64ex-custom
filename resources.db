@@ -1,0 +1,1113 @@
+# sm64ex-custom resources database
+# type: patch | model | texture
+# Format:
+# {
+# name: filename
+# link: url
+# type: category
+# }
+
+{
+name: ATM64.7z
+link: https://sm64pc.info/downloads/model_pack/ATM64.7z
+type: model
+}
+
+{
+name: ATM64_Luigi.7z
+link: https://sm64pc.info/downloads/model_pack/ATM64_Luigi.7z
+type: model
+}
+
+{
+name: ATM64_Mario.7z
+link: https://sm64pc.info/downloads/model_pack/ATM64_Mario.7z
+type: model
+}
+
+{
+name: ATM64_Wario.7z
+link: https://sm64pc.info/downloads/model_pack/ATM64_Wario.7z
+type: model
+}
+
+{
+name: Goddard.7z
+link: https://sm64pc.info/downloads/model_pack/Goddard.7z
+type: model
+}
+
+{
+name: Hatsune_Maiku.7z
+link: https://sm64pc.info/downloads/model_pack/Hatsune_Maiku.7z
+type: model
+}
+
+{
+name: Hatsune_Maiku_DynOS.7z
+link: https://sm64pc.info/downloads/model_pack/Hatsune_Maiku_DynOS.7z
+type: model
+}
+
+{
+name: RENDER96%202.2%20COOP.zip
+link: https://sm64pc.info/downloads/model_pack/RENDER96%202.2%20COOP.zip
+type: model
+}
+
+{
+name: Render96_DynOs_Luigi_v3.0.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Luigi_v3.0.7z
+type: model
+}
+
+{
+name: Render96_DynOs_Luigi_v3.2.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Luigi_v3.2.7z
+type: model
+}
+
+{
+name: Render96_DynOs_Mario_v3.0.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Mario_v3.0.7z
+type: model
+}
+
+{
+name: Render96_DynOs_Mario_v3.2.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Mario_v3.2.7z
+type: model
+}
+
+{
+name: Render96_DynOs_Peach_v0.9.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Peach_v0.9.7z
+type: model
+}
+
+{
+name: Render96_DynOs_Wario_v3.0.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Wario_v3.0.7z
+type: model
+}
+
+{
+name: Render96_DynOs_Wario_v3.2.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_Wario_v3.2.7z
+type: model
+}
+
+{
+name: Render96_DynOs_v3.0_rtx.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_v3.0_rtx.7z
+type: model
+}
+
+{
+name: Render96_DynOs_v3.2.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_DynOs_v3.2.7z
+type: model
+}
+
+{
+name: Render96_Master_Mario_v1.4.2.7z
+link: https://sm64pc.info/downloads/model_pack/Render96_Master_Mario_v1.4.2.7z
+type: model
+}
+
+{
+name: Smoothio64.7z
+link: https://sm64pc.info/downloads/model_pack/Smoothio64.7z
+type: model
+}
+
+{
+name: Smoothio64_Mario.7z
+link: https://sm64pc.info/downloads/model_pack/Smoothio64_Mario.7z
+type: model
+}
+
+{
+name: VaniLla96MP_v1.1.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96MP_v1.1.7z
+type: model
+}
+
+{
+name: VaniLla96N_v1.1.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96N_v1.1.7z
+type: model
+}
+
+{
+name: VaniLla96_HD_Luigi_v1.2.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_HD_Luigi_v1.2.7z
+type: model
+}
+
+{
+name: VaniLla96_HD_Mario_v1.2.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_HD_Mario_v1.2.7z
+type: model
+}
+
+{
+name: VaniLla96_HD_Wario_v1.2.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_HD_Wario_v1.2.7z
+type: model
+}
+
+{
+name: VaniLla96_Luigi_v1.1.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_Luigi_v1.1.7z
+type: model
+}
+
+{
+name: VaniLla96_MP_DynOS_v1.2.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_MP_DynOS_v1.2.7z
+type: model
+}
+
+{
+name: VaniLla96_MP_HD_DynOS_v1.2.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_MP_HD_DynOS_v1.2.7z
+type: model
+}
+
+{
+name: VaniLla96_Mario.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_Mario.7z
+type: model
+}
+
+{
+name: VaniLla96_Wario_Hotfix.7z
+link: https://sm64pc.info/downloads/model_pack/VaniLla96_Wario_Hotfix.7z
+type: model
+}
+
+{
+name: a_hat_in_sm64_v2.1.7z
+link: https://sm64pc.info/downloads/model_pack/a_hat_in_sm64_v2.1.7z
+type: model
+}
+
+{
+name: a_hat_in_time_v2.1.zip
+link: https://sm64pc.info/downloads/model_pack/a_hat_in_time_v2.1.zip
+type: model
+}
+
+{
+name: beta_mario.zip
+link: https://sm64pc.info/downloads/model_pack/beta_mario.zip
+type: model
+}
+
+{
+name: beta_mario_no_sounds.zip
+link: https://sm64pc.info/downloads/model_pack/beta_mario_no_sounds.zip
+type: model
+}
+
+{
+name: beta_mario_refresh_13_2.zip
+link: https://sm64pc.info/downloads/model_pack/beta_mario_refresh_13_2.zip
+type: model
+}
+
+{
+name: bow_kid.rar
+link: https://sm64pc.info/downloads/model_pack/bow_kid.rar
+type: model
+}
+
+{
+name: bow_kid_v2.1.zip
+link: https://sm64pc.info/downloads/model_pack/bow_kid_v2.1.zip
+type: model
+}
+
+{
+name: hat_kid.rar
+link: https://sm64pc.info/downloads/model_pack/hat_kid.rar
+type: model
+}
+
+{
+name: hat_kid_v2.1.zip
+link: https://sm64pc.info/downloads/model_pack/hat_kid_v2.1.zip
+type: model
+}
+
+{
+name: hd_bowser.zip
+link: https://sm64pc.info/downloads/model_pack/hd_bowser.zip
+type: model
+}
+
+{
+name: hd_koopa_the_quick.zip
+link: https://sm64pc.info/downloads/model_pack/hd_koopa_the_quick.zip
+type: model
+}
+
+{
+name: hd_mario_v2.zip
+link: https://sm64pc.info/downloads/model_pack/hd_mario_v2.zip
+type: model
+}
+
+{
+name: hd_peach_v2.zip
+link: https://sm64pc.info/downloads/model_pack/hd_peach_v2.zip
+type: model
+}
+
+{
+name: lp_promo_luigi_over_luigi.zip
+link: https://sm64pc.info/downloads/model_pack/lp_promo_luigi_over_luigi.zip
+type: model
+}
+
+{
+name: lp_promo_luigi_over_mario.zip
+link: https://sm64pc.info/downloads/model_pack/lp_promo_luigi_over_mario.zip
+type: model
+}
+
+{
+name: lp_promo_mario.zip
+link: https://sm64pc.info/downloads/model_pack/lp_promo_mario.zip
+type: model
+}
+
+{
+name: luigi.zip
+link: https://sm64pc.info/downloads/model_pack/luigi.zip
+type: model
+}
+
+{
+name: mario_kart_8_mario.zip
+link: https://sm64pc.info/downloads/model_pack/mario_kart_8_mario.zip
+type: model
+}
+
+{
+name: mawio.zip
+link: https://sm64pc.info/downloads/model_pack/mawio.zip
+type: model
+}
+
+{
+name: new-models.7z
+link: https://sm64pc.info/downloads/model_pack/new-models.7z
+type: model
+}
+
+{
+name: odyssey_mario.zip
+link: https://sm64pc.info/downloads/model_pack/odyssey_mario.zip
+type: model
+}
+
+{
+name: odyssey_mario_refresh_13_2.zip
+link: https://sm64pc.info/downloads/model_pack/odyssey_mario_refresh_13_2.zip
+type: model
+}
+
+{
+name: old_school_hd_mario.zip
+link: https://sm64pc.info/downloads/model_pack/old_school_hd_mario.zip
+type: model
+}
+
+{
+name: rayman.zip
+link: https://sm64pc.info/downloads/model_pack/rayman.zip
+type: model
+}
+
+{
+name: realistic_mario.zip
+link: https://sm64pc.info/downloads/model_pack/realistic_mario.zip
+type: model
+}
+
+{
+name: render96_v2.1_updated_goddard_fixed_2.zip
+link: https://sm64pc.info/downloads/model_pack/render96_v2.1_updated_goddard_fixed_2.zip
+type: model
+}
+
+{
+name: sm64_ex_revamped.zip
+link: https://sm64pc.info/downloads/model_pack/sm64_ex_revamped.zip
+type: model
+}
+
+{
+name: sonic.zip
+link: https://sm64pc.info/downloads/model_pack/sonic.zip
+type: model
+}
+
+{
+name: t_rexxer_inky_luigi.zip
+link: https://sm64pc.info/downloads/model_pack/t_rexxer_inky_luigi.zip
+type: model
+}
+
+{
+name: waluigi_r96_over_luigi_coop_with_sounds.zip
+link: https://sm64pc.info/downloads/model_pack/waluigi_r96_over_luigi_coop_with_sounds.zip
+type: model
+}
+
+{
+name: waluigi_r96_over_luigi_with_sounds.zip
+link: https://sm64pc.info/downloads/model_pack/waluigi_r96_over_luigi_with_sounds.zip
+type: model
+}
+
+{
+name: waluigi_r96_over_mario_with_sounds.zip
+link: https://sm64pc.info/downloads/model_pack/waluigi_r96_over_mario_with_sounds.zip
+type: model
+}
+
+{
+name: waluigi_r96_over_mario_with_sounds_refresh_13_2.zip
+link: https://sm64pc.info/downloads/model_pack/waluigi_r96_over_mario_with_sounds_refresh_13_2.zip
+type: model
+}
+
+{
+name: wario_r96_internal_sounds.zip
+link: https://sm64pc.info/downloads/model_pack/wario_r96_internal_sounds.zip
+type: model
+}
+
+{
+name: wario_r96_internal_sounds_refresh_13_2.zip
+link: https://sm64pc.info/downloads/model_pack/wario_r96_internal_sounds_refresh_13_2.zip
+type: model
+}
+
+{
+name: 0001-WIP-Enable-debug-level-selector.patch
+link: https://sm64pc.info/downloads/patches/0001-WIP-Enable-debug-level-selector.patch
+type: patch
+}
+
+{
+name: 3d_coin_v2_nightly.patch
+link: https://sm64pc.info/downloads/patches/3d_coin_v2_nightly.patch
+type: patch
+}
+
+{
+name: 3d_coins_sm64ex-alo-master_v2.patch
+link: https://sm64pc.info/downloads/patches/3d_coins_sm64ex-alo-master_v2.patch
+type: patch
+}
+
+{
+name: 3d_coins_sm64ex-alo-master_v3.patch
+link: https://sm64pc.info/downloads/patches/3d_coins_sm64ex-alo-master_v3.patch
+type: patch
+}
+
+{
+name: 60fps.patch
+link: https://sm64pc.info/downloads/patches/60fps.patch
+type: patch
+}
+
+{
+name: 60fps_ex.patch
+link: https://sm64pc.info/downloads/patches/60fps_ex.patch
+type: patch
+}
+
+{
+name: 60fps_sm64ex-alo-master_v3.patch
+link: https://sm64pc.info/downloads/patches/60fps_sm64ex-alo-master_v3.patch
+type: patch
+}
+
+{
+name: Added-exit-button.patch
+link: https://sm64pc.info/downloads/patches/Added-exit-button.patch
+type: patch
+}
+
+{
+name: CHEATER.coop.v3.patch
+link: https://sm64pc.info/downloads/patches/CHEATER.coop.v3.patch
+type: patch
+}
+
+{
+name: CHEATERv11.ex_dynos.patch
+link: https://sm64pc.info/downloads/patches/CHEATERv11.ex_dynos.patch
+type: patch
+}
+
+{
+name: DynOS.0.5.patch
+link: https://sm64pc.info/downloads/patches/DynOS.0.5.patch
+type: patch
+}
+
+{
+name: DynOS.0.6.patch
+link: https://sm64pc.info/downloads/patches/DynOS.0.6.patch
+type: patch
+}
+
+{
+name: DynOS.1.0.patch
+link: https://sm64pc.info/downloads/patches/DynOS.1.0.patch
+type: patch
+}
+
+{
+name: DynOS.1.0.rev.2.patch
+link: https://sm64pc.info/downloads/patches/DynOS.1.0.rev.2.patch
+type: patch
+}
+
+{
+name: DynOS.1.1.patch
+link: https://sm64pc.info/downloads/patches/DynOS.1.1.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v.101a.Render96.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v.101a.Render96.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.01a.Render96ex.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.01a.Render96ex.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03.sm64-port.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03.sm64-port.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03.sm64ex.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03.sm64ex.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03b.Render96ex.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03b.Render96ex.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03b.coop.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03b.coop.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03b.sm64ex.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03b.sm64ex.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03c.coop.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03c.coop.patch
+type: patch
+}
+
+{
+name: Extended.Moveset.v1.03d.coop.patch
+link: https://sm64pc.info/downloads/patches/Extended.Moveset.v1.03d.coop.patch
+type: patch
+}
+
+{
+name: L_is_real_2401_mod_refresh12.patch
+link: https://sm64pc.info/downloads/patches/L_is_real_2401_mod_refresh12.patch
+type: patch
+}
+
+{
+name: angry_penguin.patch
+link: https://sm64pc.info/downloads/patches/angry_penguin.patch
+type: patch
+}
+
+{
+name: anti_gravity_v3.patch
+link: https://sm64pc.info/downloads/patches/anti_gravity_v3.patch
+type: patch
+}
+
+{
+name: anti_gravity_v4.patch
+link: https://sm64pc.info/downloads/patches/anti_gravity_v4.patch
+type: patch
+}
+
+{
+name: anti_gravity_v5.patch
+link: https://sm64pc.info/downloads/patches/anti_gravity_v5.patch
+type: patch
+}
+
+{
+name: beta_easter_egg_fish.patch
+link: https://sm64pc.info/downloads/patches/beta_easter_egg_fish.patch
+type: patch
+}
+
+{
+name: beta_easter_egg_fish_v2.patch
+link: https://sm64pc.info/downloads/patches/beta_easter_egg_fish_v2.patch
+type: patch
+}
+
+{
+name: beta_easter_egg_fish_v3.patch
+link: https://sm64pc.info/downloads/patches/beta_easter_egg_fish_v3.patch
+type: patch
+}
+
+{
+name: beta_hud.patch
+link: https://sm64pc.info/downloads/patches/beta_hud.patch
+type: patch
+}
+
+{
+name: beta_mario.patch
+link: https://sm64pc.info/downloads/patches/beta_mario.patch
+type: patch
+}
+
+{
+name: captain_toad_stars.patch
+link: https://sm64pc.info/downloads/patches/captain_toad_stars.patch
+type: patch
+}
+
+{
+name: demo_title_screen.patch
+link: https://sm64pc.info/downloads/patches/demo_title_screen.patch
+type: patch
+}
+
+{
+name: demo_title_screen_v5.patch
+link: https://sm64pc.info/downloads/patches/demo_title_screen_v5.patch
+type: patch
+}
+
+{
+name: demo_title_screen_v6.patch
+link: https://sm64pc.info/downloads/patches/demo_title_screen_v6.patch
+type: patch
+}
+
+{
+name: exit_course_50_coin_fix.patch
+link: https://sm64pc.info/downloads/patches/exit_course_50_coin_fix.patch
+type: patch
+}
+
+{
+name: ext_bounds_col_patches.patch
+link: https://sm64pc.info/downloads/patches/ext_bounds_col_patches.patch
+type: patch
+}
+
+{
+name: ext_bounds_col_patches_v6.patch
+link: https://sm64pc.info/downloads/patches/ext_bounds_col_patches_v6.patch
+type: patch
+}
+
+{
+name: ext_bounds_col_patches_v7.patch
+link: https://sm64pc.info/downloads/patches/ext_bounds_col_patches_v7.patch
+type: patch
+}
+
+{
+name: extended_moveset_sm64ex-alo-master_v4.patch
+link: https://sm64pc.info/downloads/patches/extended_moveset_sm64ex-alo-master_v4.patch
+type: patch
+}
+
+{
+name: extended_moveset_sm64ex-alo-master_v6.patch
+link: https://sm64pc.info/downloads/patches/extended_moveset_sm64ex-alo-master_v6.patch
+type: patch
+}
+
+{
+name: extended_moveset_sm64ex-alo-master_v7.patch
+link: https://sm64pc.info/downloads/patches/extended_moveset_sm64ex-alo-master_v7.patch
+type: patch
+}
+
+{
+name: extended_moveset_sm64ex-alo-master_v8.patch
+link: https://sm64pc.info/downloads/patches/extended_moveset_sm64ex-alo-master_v8.patch
+type: patch
+}
+
+{
+name: extreme_fixes.patch
+link: https://sm64pc.info/downloads/patches/extreme_fixes.patch
+type: patch
+}
+
+{
+name: extreme_fixes_v5.patch
+link: https://sm64pc.info/downloads/patches/extreme_fixes_v5.patch
+type: patch
+}
+
+{
+name: extreme_fixes_v6.patch
+link: https://sm64pc.info/downloads/patches/extreme_fixes_v6.patch
+type: patch
+}
+
+{
+name: increase_delay_on_credits.patch
+link: https://sm64pc.info/downloads/patches/increase_delay_on_credits.patch
+type: patch
+}
+
+{
+name: increase_delay_on_star_select.patch
+link: https://sm64pc.info/downloads/patches/increase_delay_on_star_select.patch
+type: patch
+}
+
+{
+name: inertia.patch
+link: https://sm64pc.info/downloads/patches/inertia.patch
+type: patch
+}
+
+{
+name: leave_ending_screen.patch
+link: https://sm64pc.info/downloads/patches/leave_ending_screen.patch
+type: patch
+}
+
+{
+name: leave_game.patch
+link: https://sm64pc.info/downloads/patches/leave_game.patch
+type: patch
+}
+
+{
+name: nonstop_mode_always_enabled.patch
+link: https://sm64pc.info/downloads/patches/nonstop_mode_always_enabled.patch
+type: patch
+}
+
+{
+name: omm.3.1.0.patch
+link: https://sm64pc.info/downloads/patches/omm.3.1.0.patch
+type: patch
+}
+
+{
+name: omm.4.1.3.hotfix.patch
+link: https://sm64pc.info/downloads/patches/omm.4.1.3.hotfix.patch
+type: patch
+}
+
+{
+name: omm.5.1.2.patch
+link: https://sm64pc.info/downloads/patches/omm.5.1.2.patch
+type: patch
+}
+
+{
+name: omm.6.0.5.patch
+link: https://sm64pc.info/downloads/patches/omm.6.0.5.patch
+type: patch
+}
+
+{
+name: omm.6.1.0.patch
+link: https://sm64pc.info/downloads/patches/omm.6.1.0.patch
+type: patch
+}
+
+{
+name: omm.6.1.2.hotfix.patch
+link: https://sm64pc.info/downloads/patches/omm.6.1.2.hotfix.patch
+type: patch
+}
+
+{
+name: omm.6.1.2.patch
+link: https://sm64pc.info/downloads/patches/omm.6.1.2.patch
+type: patch
+}
+
+{
+name: omm.7.0.0.hotfix.patch
+link: https://sm64pc.info/downloads/patches/omm.7.0.0.hotfix.patch
+type: patch
+}
+
+{
+name: omm.7.0.2.patch
+link: https://sm64pc.info/downloads/patches/omm.7.0.2.patch
+type: patch
+}
+
+{
+name: omm.7.0.9.rev.2.patch
+link: https://sm64pc.info/downloads/patches/omm.7.0.9.rev.2.patch
+type: patch
+}
+
+{
+name: omm.7.1.0.rev.2.patch
+link: https://sm64pc.info/downloads/patches/omm.7.1.0.rev.2.patch
+type: patch
+}
+
+{
+name: omm.7.1.0.rev.5.patch
+link: https://sm64pc.info/downloads/patches/omm.7.1.0.rev.5.patch
+type: patch
+}
+
+{
+name: open_castle.patch
+link: https://sm64pc.info/downloads/patches/open_castle.patch
+type: patch
+}
+
+{
+name: pitch_shifting_removal.patch
+link: https://sm64pc.info/downloads/patches/pitch_shifting_removal.patch
+type: patch
+}
+
+{
+name: pitch_shifting_removal_v2.patch
+link: https://sm64pc.info/downloads/patches/pitch_shifting_removal_v2.patch
+type: patch
+}
+
+{
+name: puppycam.patch
+link: https://sm64pc.info/downloads/patches/puppycam.patch
+type: patch
+}
+
+{
+name: red_coin_value_dist.patch
+link: https://sm64pc.info/downloads/patches/red_coin_value_dist.patch
+type: patch
+}
+
+{
+name: red_coin_value_dist_v2.patch
+link: https://sm64pc.info/downloads/patches/red_coin_value_dist_v2.patch
+type: patch
+}
+
+{
+name: red_coin_value_dist_v3.patch
+link: https://sm64pc.info/downloads/patches/red_coin_value_dist_v3.patch
+type: patch
+}
+
+{
+name: star_road_release_v3.patch
+link: https://sm64pc.info/downloads/patches/star_road_release_v3.patch
+type: patch
+}
+
+{
+name: star_road_release_v5.patch
+link: https://sm64pc.info/downloads/patches/star_road_release_v5.patch
+type: patch
+}
+
+{
+name: star_road_release_v6.patch
+link: https://sm64pc.info/downloads/patches/star_road_release_v6.patch
+type: patch
+}
+
+{
+name: star_road_release_v7.patch
+link: https://sm64pc.info/downloads/patches/star_road_release_v7.patch
+type: patch
+}
+
+{
+name: star_road_release_v8.patch
+link: https://sm64pc.info/downloads/patches/star_road_release_v8.patch
+type: patch
+}
+
+{
+name: thwomp_simulator_v4.patch
+link: https://sm64pc.info/downloads/patches/thwomp_simulator_v4.patch
+type: patch
+}
+
+{
+name: thwomp_simulator_v5.patch
+link: https://sm64pc.info/downloads/patches/thwomp_simulator_v5.patch
+type: patch
+}
+
+{
+name: thwomp_simulator_v6.patch
+link: https://sm64pc.info/downloads/patches/thwomp_simulator_v6.patch
+type: patch
+}
+
+{
+name: tight_controls.patch
+link: https://sm64pc.info/downloads/patches/tight_controls.patch
+type: patch
+}
+
+{
+name: time_trials.2.2.coop.hotfix.2.patch
+link: https://sm64pc.info/downloads/patches/time_trials.2.2.coop.hotfix.2.patch
+type: patch
+}
+
+{
+name: time_trials.2.3.patch
+link: https://sm64pc.info/downloads/patches/time_trials.2.3.patch
+type: patch
+}
+
+{
+name: time_trials.2.4.hotfix.patch
+link: https://sm64pc.info/downloads/patches/time_trials.2.4.hotfix.patch
+type: patch
+}
+
+{
+name: tree_shadows.patch
+link: https://sm64pc.info/downloads/patches/tree_shadows.patch
+type: patch
+}
+
+{
+name: tree_shadows_v2.patch
+link: https://sm64pc.info/downloads/patches/tree_shadows_v2.patch
+type: patch
+}
+
+{
+name: v11.5.ex.patch
+link: https://sm64pc.info/downloads/patches/v11.5.ex.patch
+type: patch
+}
+
+{
+name: v11.6.alpha.patch
+link: https://sm64pc.info/downloads/patches/v11.6.alpha.patch
+type: patch
+}
+
+{
+name: waluigis_taco_stand_r96ex_alpha_v0.3.patch
+link: https://sm64pc.info/downloads/patches/waluigis_taco_stand_r96ex_alpha_v0.3.patch
+type: patch
+}
+
+{
+name: wts_coop.patch
+link: https://sm64pc.info/downloads/patches/wts_coop.patch
+type: patch
+}
+
+{
+name: wts_ex.patch
+link: https://sm64pc.info/downloads/patches/wts_ex.patch
+type: patch
+}
+
+{
+name: b-roll_power_meter.pak
+link: https://sm64pc.info/downloads/texture_pack/b-roll_power_meter.pak
+type: texture
+}
+
+{
+name: b-roll_power_meter.zip
+link: https://sm64pc.info/downloads/texture_pack/b-roll_power_meter.zip
+type: texture
+}
+
+{
+name: beta_hud.zip
+link: https://sm64pc.info/downloads/texture_pack/beta_hud.zip
+type: texture
+}
+
+{
+name: beta_hud_c_file.zip
+link: https://sm64pc.info/downloads/texture_pack/beta_hud_c_file.zip
+type: texture
+}
+
+{
+name: cleaner.zip
+link: https://sm64pc.info/downloads/texture_pack/cleaner.zip
+type: texture
+}
+
+{
+name: hopzy.pak
+link: https://sm64pc.info/downloads/texture_pack/hopzy.pak
+type: texture
+}
+
+{
+name: hypatia.zip
+link: https://sm64pc.info/downloads/texture_pack/hypatia.zip
+type: texture
+}
+
+{
+name: jappawakka_admentus_hd.pak
+link: https://sm64pc.info/downloads/texture_pack/jappawakka_admentus_hd.pak
+type: texture
+}
+
+{
+name: jappawakka_admentus_hd.zip
+link: https://sm64pc.info/downloads/texture_pack/jappawakka_admentus_hd.zip
+type: texture
+}
+
+{
+name: minecraft.pak
+link: https://sm64pc.info/downloads/texture_pack/minecraft.pak
+type: texture
+}
+
+{
+name: minecraft.zip
+link: https://sm64pc.info/downloads/texture_pack/minecraft.zip
+type: texture
+}
+
+{
+name: mollymutt.pak
+link: https://sm64pc.info/downloads/texture_pack/mollymutt.pak
+type: texture
+}
+
+{
+name: mollymutt.zip
+link: https://sm64pc.info/downloads/texture_pack/mollymutt.zip
+type: texture
+}
+
+{
+name: owo.zip
+link: https://sm64pc.info/downloads/texture_pack/owo.zip
+type: texture
+}
+
+{
+name: p3st.pak
+link: https://sm64pc.info/downloads/texture_pack/p3st.pak
+type: texture
+}
+
+{
+name: p3st.zip
+link: https://sm64pc.info/downloads/texture_pack/p3st.zip
+type: texture
+}
+
+{
+name: realistic.pak
+link: https://sm64pc.info/downloads/texture_pack/realistic.pak
+type: texture
+}
+
+{
+name: realistic.zip
+link: https://sm64pc.info/downloads/texture_pack/realistic.zip
+type: texture
+}
+
+{
+name: redrawn.pak
+link: https://sm64pc.info/downloads/texture_pack/redrawn.pak
+type: texture
+}
+
+{
+name: redrawn.zip
+link: https://sm64pc.info/downloads/texture_pack/redrawn.zip
+type: texture
+}
+
+{
+name: render96_hd.pak
+link: https://sm64pc.info/downloads/texture_pack/render96_hd.pak
+type: texture
+}
+
+{
+name: render96_hd.zip
+link: https://sm64pc.info/downloads/texture_pack/render96_hd.zip
+type: texture
+}
+
+{
+name: resrgan_n64_faithful.pak
+link: https://sm64pc.info/downloads/texture_pack/resrgan_n64_faithful.pak
+type: texture
+}
+
+{
+name: resrgan_n64_faithful.zip
+link: https://sm64pc.info/downloads/texture_pack/resrgan_n64_faithful.zip
+type: texture
+}
+
+{
+name: sm64pc_xbrz_2x.pak
+link: https://sm64pc.info/downloads/texture_pack/sm64pc_xbrz_2x.pak
+type: texture
+}
+
+{
+name: sm64pc_xbrz_2x.zip
+link: https://sm64pc.info/downloads/texture_pack/sm64pc_xbrz_2x.zip
+type: texture
+}
+

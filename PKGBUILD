@@ -93,8 +93,8 @@ _configure_options() {
     if [ "$_useCache" = "1" ]; then
         mkdir -p "$_EXT_CACHE_PATH"
     fi
-    if [ "$_cleanCache" = "1" ]; then
-        rm -rf "${_EXT_CACHE_PATH:?}"/*
+    if [ "$_cleanCache" = "1" ] && [ -n "$_EXT_CACHE_PATH" ]; then
+        rm -rf "${_EXT_CACHE_PATH}"/*
     fi
 
     # Region

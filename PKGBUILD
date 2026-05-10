@@ -667,8 +667,10 @@ package() {
             install -Dm755 "/usr/$_arch-w64-mingw32/bin/glew32.dll" "${pkgdir}/opt/sm64ex/glew32.dll"
         fi
 
-        install -Dm755 "$_where/sm64ex.desktop" "${pkgdir}/usr/share/applications/sm64ex.desktop"
-        install -Dm755 "$_where/SuperMario64.png" "${pkgdir}/usr/share/icons/hicolor/64x64/apps/SuperMario64.png"
+        if [ "$_install_desktop" = "1" ]; then
+            install -Dm755 "$_where/sm64ex.desktop" "${pkgdir}/usr/share/applications/sm64ex.desktop"
+            install -Dm755 "$_where/SuperMario64.png" "${pkgdir}/usr/share/icons/hicolor/64x64/apps/SuperMario64.png"
+        fi
     fi
 
     rm -rf "$_where/win_gl" "$_where/win" "$_where/web" "$_where/region" \

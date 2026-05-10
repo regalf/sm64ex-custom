@@ -88,6 +88,10 @@ _configure_options() {
         source "$_EXT_CONFIG_PATH"
     fi
 
+    # Defaults
+    _EXT_CACHE_PATH=${_EXT_CACHE_PATH:-~/.cache/sm64ex-custom}
+    _EXT_CONFIG_PATH=${_EXT_CONFIG_PATH:-~/.config/sm64ex-custom/config}
+
     # Cache
     _useCache=${_useCache:-0}
     if [ "$_useCache" = "1" ]; then

@@ -246,25 +246,62 @@ PKGBUILD has been configured to use them (see `_configure_options()`).
 
 ## Builder GUI (wxPython)
 
-Two versions of the graphical builder exist:
+The graphical builder is now in a **separate repository**: [`github.com/regalf/sm64ex-builder`](https://github.com/regalf/sm64ex-builder)
 
-### Sm64exBuilder
+### Features (v2.0.0)
 
-- wxPython interface with a 5-tab notebook
-- Generates `customization.cfg` and launches `makepkg -si`
-- Uses the `pkgbuild-no-interactive` branch
-- 473 lines
+- 5-tab notebook GUI (General, Build Options, Patches, Models & Textures, Config)
+- Parses `resources.db` dynamically — no hardcoded resource lists
+- Search bars for patches and extra models
+- Generates `customization.cfg` and launches `makepkg -si` in a background thread
+- **Cross-platform**: runs on Linux natively and on **Windows via MSYS2**
+- **Output Directory** — automatically copies built game files (binary + `res/`) to a folder of your choice
+- **Clean up after build** — removes `src/`, `pkg/`, and package files
+- **Install Dependencies** button — installs all required packages (pacman on Linux / pacman inside MSYS2 on Windows)
+- Live output console with real-time build logging
+- `--reset` flag to clear all settings (`~/.config/sm64ex-builder/`)
+- Backend: uses the `modular-experimental` branch of this repo
 
-### Sm64exBuilderModulare
+### Downloads
 
-- Modular version (638 lines)
-- Parses `resources.db` instead of HTML
-- Search bar for patches and models
-- Dynamic update from GitHub
-- Uses the `modular-experimental` branch
+Pre-built binaries for each release:
+- **Linux**: standalone ELF (`sm64ex-builder`)
+- **Windows**: standalone `.exe` (`sm64ex-builder.exe`)
+
+### Usage
 
 ```bash
-python3 /path/to/Sm64exBuilderModulare/builder/sm64ex-builder.py
+# From source
+python3 sm64ex-builder.py
+
+# Standalone binary
+./sm64ex-builder
+
+# Reset configuration
+./sm64ex-builder --reset
+```
+
+### Requirements per platform
+
+**Linux (Arch):**
+```
+python-wxpython  git  base-devel
+```
+
+**Windows (MSYS2/Mingw64):**
+```
+mingw-w64-x86_64-python  mingw-w64-x86_64-wxPython  mingw-w64-x86_64-SDL2
+mingw-w64-x86_64-glew    mingw-w64-x86_64-toolchain  base-devel  git
+```
+
+### Build from source (standalone binary)
+
+```bash
+# Linux
+pyinstaller --onefile --name sm64ex-builder sm64ex-builder.py
+
+# Windows (in MSYS2)
+pyinstaller --onefile --windowed --name "sm64ex-builder" sm64ex-builder.py
 ```
 
 ---
@@ -317,4 +354,8 @@ makepkg -si
 git checkout pkgbuild-no-interactive
 # Edit customization.cfg...
 makepkg -si
+
+# GUI builder (see Builder GUI section below)
+# Clone https://github.com/regalf/sm64ex-builder and run:
+python3 sm64ex-builder.py
 ```

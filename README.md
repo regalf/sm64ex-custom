@@ -30,6 +30,10 @@ All links now point to `sm64pc.info` which hosts these files permanently.
 
 For detailed documentation about all branches, PKGBUILD internals, configuration options, and the GUI builder, see [DOCUMENTATION.md](DOCUMENTATION.md).
 
+## GUI Builder
+
+A graphical wxPython builder is available in a [separate repository](https://github.com/regalf/sm64ex-builder). It provides a 5-tab interface to configure all build options, patches, models, and texture packs, then launches `makepkg -si` with a single click. Supports both Linux and Windows (via MSYS2). Pre-built binaries are available in the [releases](https://github.com/regalf/sm64ex-builder/releases).
+
 ## Why not on AUR?
 
 This package is **not available on AUR** because:

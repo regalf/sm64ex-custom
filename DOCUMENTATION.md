@@ -178,7 +178,7 @@ _textsaves=0
 _target_web=0
 ```
 
-**Available patches:**
+ **Available patches:**
 
 ```bash
 _60fps=1
@@ -195,6 +195,8 @@ _time_trial=0
 _odyssey_moveset=0
 ```
 
+<p style="color: gray">(some patches may cause compilation errors or conflicts with certain texture packs; if the build fails, try disabling patches one by one)</p>
+
 **Models and textures:**
 
 ```bash
@@ -208,6 +210,8 @@ _texture_pack=mollymutt       # default, mollymutt, hypatia, sm64_redrawn,
                               # resrgan_16x, resrgan_n64, p3st, cleaner,
                               # owo, minecraft, jappawakka_admentus_hd, beta_hud
 ```
+
+<p style="color: gray">(some models and texture packs may not be compatible with older render APIs or certain patches; switch to GL/GL_LEGACY if you encounter graphical issues)</p>
 
 **Bitness and Render:**
 

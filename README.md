@@ -122,6 +122,8 @@ _region=us
 ### Texture Packs
 - MollyMutt's, Hypatia's, SM64 Redrawn, RESRGAN upscales, p3st, Cleaner, OwOify, Minecraft, JappaWakka & Admentus HD, Beta HUD
 
+<p style="color: gray">(some patches, models, or texture packs may cause compilation errors or conflicts; if the build fails, try disabling patches one by one or switch to GL render API)</p>
+
 ## Original Repository
 
 This work is based on [Brian Allred's sm64ex-custom](https://gitlab.com/BrianAllred/sm64ex-custom).

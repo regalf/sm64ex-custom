@@ -13,13 +13,44 @@ with numerous enhancements, patches, custom models, and texture packs. It is:
 
 Based on [Brian Allred's sm64ex-custom](https://gitlab.com/BrianAllred/sm64ex-custom).
 
-## Features (modular-experimental)
+## Features
 
 - **Modular PKGBUILD** — loop-based patch/model/texture handling via `customization.cfg`
 - **Dynamic game repo** — build from any fork via `_repo_url`/`_repo_branch` in config
 - **Smart branch switching** — `prepare()` detects repo/branch changes and re-clones automatically
 - **Flexible binary detection** — works with any fork's binary name (`sm64.us.*`, `sm64coopdx`, etc.)
 - **Compatible with sm64ex-builder GUI** — full support for the Python builder
+- **resources.db** — all available patches, models, and textures in a simple editable file
+
+## GUI Builder
+
+The [**sm64ex-builder**](https://github.com/regalf/sm64ex-builder) is a wxPython GUI
+that wraps this PKGBUILD for a point-and-click build experience:
+
+- 5-tab interface: General, Build Options, Patches, Models & Textures, Config
+- Auto-generates `customization.cfg` from GUI selections
+- One-click build with live output (runs `makepkg` in background thread)
+- Search bars to filter patches and models
+- Select game repository and branch directly from the UI
+- Cross-platform: Windows (MSYS2) and Linux (Arch)
+- Pre-built standalone binaries available in [releases](https://github.com/regalf/sm64ex-builder/releases)
+
+```bash
+python3 sm64ex-builder.py          # run from source
+./sm64ex-builder                   # or use the standalone binary
+```
+
+## Changes Made
+
+Fixes and improvements over the original PKGBUILD:
+
+- **Updated all Discord CDN links** to permanent links on `sm64pc.info` (patches, models, textures)
+- **Fixed `OPTIONS` variable** renamed to `_OPTIONS` (conflict with makepkg read-only variable)
+- **Fixed missing parameters** in `_download()` calls (added `$_useCache` and `$_EXT_CACHE_PATH`)
+- **Fixed file extraction** (`.rar` → `.zip` where appropriate)
+- **Fixed inconsistent filenames** in download checks and extraction commands
+- **Flexible binary detection**: `package()` uses `find` as fallback for non-standard fork binaries
+- **Dynamic repo support**: build from any sm64ex fork
 
 ## Prerequisites
 
@@ -32,21 +63,16 @@ Based on [Brian Allred's sm64ex-custom](https://gitlab.com/BrianAllred/sm64ex-cu
 ### Quick start
 
 ```bash
-# Clone this repository
 git clone -b modular-experimental https://github.com/regalf/sm64ex-custom.git
 cd sm64ex-custom
-
-# Place your ROM in the build directory
 cp /path/to/your/baserom.us.z64 ./
-
-# Build and install
 makepkg -si
 ```
 
 ### Using customization.cfg
 
 ```bash
-mkidr -p ~/.config/sm64ex-custom
+mkdir -p ~/.config/sm64ex-custom
 cp customization.cfg ~/.config/sm64ex-custom/config
 ```
 
@@ -65,6 +91,8 @@ _repo_branch="your-branch"
 The PKGBUILD will automatically switch to the configured fork during the build.
 Patches and resources from `resources.db` are designed for `sm64pc/sm64ex` and may
 not work correctly on other forks.
+
+If using the **builder GUI**, specify `user/repo` and branch directly in the **General** tab.
 
 ## customization.cfg Reference
 

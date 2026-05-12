@@ -21,14 +21,7 @@ provides=(sm64ex)
 
 _gitname=sm64ex
 
-# ---- Load customization.cfg for dynamic source repo ----
-[ -f "$PWD/customization.cfg" ] && source "$PWD/customization.cfg"
-
-# Default game repository (overridable in customization.cfg via _repo_url, _repo_branch)
-_repo_url="${_repo_url:-https://github.com/sm64pc/sm64ex.git}"
-_repo_branch="${_repo_branch:-nightly}"
-
-source=("${_gitname}::git+${_repo_url}#branch=${_repo_branch}")
+source=('git+https://github.com/sm64pc/sm64ex.git#branch=nightly')
 sha256sums=('SKIP')
 
 _where="$PWD"
@@ -443,16 +436,20 @@ pkgver() {
 prepare() {
     _configure_options
 
-    # Verify the cloned source matches the configured repo URL
+    # ---- Dynamic game repo: switch if _repo_url differs from cached ----
+    _repo_url="${_repo_url:-https://github.com/sm64pc/sm64ex.git}"
+    _repo_branch="${_repo_branch:-nightly}"
     if [ -d "$srcdir/$_gitname/.git" ]; then
         _existing_url=$(git -C "$srcdir/$_gitname" remote get-url origin 2>/dev/null || true)
         if [ "$_existing_url" != "$_repo_url" ]; then
-            echo "WARNING: Remote URL mismatch — cached source points to:" >&2
+            echo "WARNING: Game repository changed" >&2
             echo "  cached: $_existing_url" >&2
-            echo "  config: $_repo_url" >&2
-            echo "Removing old source and re-cloning from configured URL..." >&2
-            rm -rf "$srcdir/$_gitname"
-            git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$srcdir/$_gitname"
+            echo "  config: $_repo_url ($_repo_branch)" >&2
+            echo "Re-cloning from configured URL..." >&2
+            cd "$srcdir"
+            rm -rf "$_gitname"
+            git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$_gitname"
+            cd "$_gitname"
         fi
     fi
 

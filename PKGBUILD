@@ -21,7 +21,7 @@ provides=(sm64ex)
 
 _gitname=sm64ex
 
-source=('git+https://github.com/sm64pc/sm64ex.git#branch=nightly')
+source=('git+https://github.com/sm64pc/sm64ex.git#branch=master')
 sha256sums=('SKIP')
 
 _where="$PWD"
@@ -436,7 +436,7 @@ pkgver() {
 prepare() {
     _configure_options
 
-    # ---- Dynamic game repo: switch if _repo_url differs from cached ----
+    # ---- Dynamic game repo: switch URL/branch if config differs from cached ----
     _repo_url="${_repo_url:-https://github.com/sm64pc/sm64ex.git}"
     _repo_branch="${_repo_branch:-nightly}"
     if [ -d "$srcdir/$_gitname/.git" ]; then
@@ -449,11 +449,21 @@ prepare() {
             cd "$srcdir"
             rm -rf "$_gitname"
             git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$_gitname"
-            cd "$_gitname"
+            cd "$srcdir/$_gitname"
+        else
+            _current_branch=$(git -C "$srcdir/$_gitname" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+            if [ "$_current_branch" != "$_repo_branch" ]; then
+                echo "Switching to branch $_repo_branch..." >&2
+                cd "$srcdir/$_gitname"
+                git fetch origin "$_repo_branch" 2>/dev/null || true
+                git checkout "$_repo_branch" 2>/dev/null || true
+            else
+                cd "$srcdir/$_gitname"
+            fi
         fi
+    else
+        cd "$srcdir/$_gitname"
     fi
-
-    cd "$srcdir/$_gitname"
 
     if [ "$_windows_build" = "1" ]; then
         if [ "$_render_api" = "GL" ] || [ "$_render_api" = "GL_LEGACY" ]; then

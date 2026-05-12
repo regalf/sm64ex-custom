@@ -21,7 +21,14 @@ provides=(sm64ex)
 
 _gitname=sm64ex
 
-source=('git+https://github.com/sm64pc/sm64ex.git#branch=nightly')
+# ---- Load customization.cfg for dynamic source repo ----
+[ -f customization.cfg ] && source customization.cfg
+
+# Default game repository (overridable in customization.cfg via _repo_url, _repo_branch)
+_repo_url="${_repo_url:-https://github.com/sm64pc/sm64ex.git}"
+_repo_branch="${_repo_branch:-nightly}"
+
+source=("${_gitname}::git+${_repo_url}#branch=${_repo_branch}")
 sha256sums=('SKIP')
 
 _where="$PWD"
@@ -236,7 +243,6 @@ _configure_options() {
     _EXT_CONFIG_PATH=${_EXT_CONFIG_PATH:-~/.config/sm64ex-custom/config}
     _useCache=${_useCache:-0}
     _region=${_region:-us}
-
     if [ "$_useCache" = "1" ]; then
         mkdir -p "$_EXT_CACHE_PATH"
     fi

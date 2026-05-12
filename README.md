@@ -85,6 +85,16 @@ cp /path/to/your/baserom.us.z64 ./
 makepkg -si
 ```
 
+### Building from a different fork
+
+This PKGBUILD supports building from any sm64ex fork. Set `_repo_url` and `_repo_branch`
+in `customization.cfg`:
+
+```bash
+_repo_url="https://github.com/yourusername/sm64ex-fork.git"
+_repo_branch="your-branch"
+```
+
 ### Using customization.cfg
 
 Create a config file at `~/.config/sm64ex-custom/config` to pre-configure build options:

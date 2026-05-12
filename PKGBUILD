@@ -510,20 +510,25 @@ package() {
     ls -la "${pkgdir}/opt/sm64ex/" 2>&1 || echo "(empty)" >&2
 
     if [ "$_target" = "pc" ]; then
-        # Find the built binary (name varies by render API: sm64.us.f3dex2e, sm64.us.GL, etc.)
+        # Find the built binary (name varies by render API or fork: sm64.us.f3dex2e, sm64coopdx, etc.)
         _sm64_exe=$(ls "${pkgdir}/opt/sm64ex/sm64.${_region}".* 2>/dev/null | head -1)
         if [ -z "$_sm64_exe" ]; then
-            echo "WARNING: No sm64 binary found in build output! Build may have failed." >&2
+            # Try to find any executable that's not a directory or shared lib
+            _sm64_exe=$(find "${pkgdir}/opt/sm64ex" -maxdepth 1 -type f -executable ! -name "*.so" ! -name "*.sh" 2>/dev/null | head -1)
+        fi
+        if [ -z "$_sm64_exe" ]; then
+            echo "WARNING: No game binary found in build output! Build may have failed." >&2
             ls -la "${pkgdir}/opt/sm64ex/" >&2
             exit 1
         fi
+        echo "Found binary: $_sm64_exe" >&2
         if [ -e "$_where/win" ] || [ -e "$_where/win_gl" ]; then
             install -Dm755 "$_sm64_exe" "${pkgdir}/opt/sm64ex/sm64ex.exe"
         else
             install -Dm755 "$_sm64_exe" "${pkgdir}/opt/sm64ex/sm64ex"
         fi
 
-        rm -f "${pkgdir}/opt/sm64ex/sm64.${_region}".*
+        rm -f "${pkgdir}/opt/sm64ex"/sm64.* "${pkgdir}/opt/sm64ex"/sm64coopdx
 
         mkdir -p "${pkgdir}/usr/bin"
 

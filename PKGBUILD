@@ -434,11 +434,12 @@ pkgver() {
 }
 
 prepare() {
-    _configure_options
-
-    # ---- Dynamic game repo: switch URL/branch if config differs from cached ----
+    # Load _repo_url/_repo_branch early, before _configure_options
+    [ -f "$_where/customization.cfg" ] && source "$_where/customization.cfg"
     _repo_url="${_repo_url:-https://github.com/sm64pc/sm64ex.git}"
     _repo_branch="${_repo_branch:-nightly}"
+
+    # ---- Dynamic game repo: switch URL/branch now, before _configure_options ----
     if [ -d "$srcdir/$_gitname/.git" ]; then
         _existing_url=$(git -C "$srcdir/$_gitname" remote get-url origin 2>/dev/null || true)
         if [ "$_existing_url" != "$_repo_url" ]; then
@@ -449,7 +450,6 @@ prepare() {
             cd "$srcdir"
             rm -rf "$_gitname"
             git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$_gitname"
-            cd "$srcdir/$_gitname"
         else
             _current_branch=$(git -C "$srcdir/$_gitname" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
             if [ "$_current_branch" != "$_repo_branch" ]; then
@@ -457,13 +457,12 @@ prepare() {
                 cd "$srcdir/$_gitname"
                 git fetch origin "$_repo_branch" 2>/dev/null || true
                 git checkout "$_repo_branch" 2>/dev/null || true
-            else
-                cd "$srcdir/$_gitname"
             fi
         fi
-    else
-        cd "$srcdir/$_gitname"
     fi
+
+    _configure_options
+    cd "$srcdir/$_gitname"
 
     if [ "$_windows_build" = "1" ]; then
         if [ "$_render_api" = "GL" ] || [ "$_render_api" = "GL_LEGACY" ]; then

@@ -121,6 +121,33 @@ git checkout modular-experimental
 
 ---
 
+## Quick start
+
+```bash
+git clone https://github.com/regalf/sm64ex-custom.git
+cd sm64ex-custom
+
+# Place your ROM
+cp /path/to/baserom.us.z64 ./
+
+# Interactive build (master)
+makepkg -si
+
+# Non-interactive build
+git checkout pkgbuild-no-interactive
+# Edit customization.cfg...
+makepkg -si
+
+# GUI builder (v3.0.0) — dynamic repo, install toggle, cross-compilation
+# Clone https://github.com/regalf/sm64ex-builder and run:
+python3 sm64ex-builder.py
+
+# Or download a standalone binary from the releases page
+./sm64ex-builder
+```
+
+---
+
 ## How the PKGBUILD works
 
 ### General structure
@@ -369,28 +396,3 @@ on `sm64pc.info` (patches, models, textures).
 - Arch Linux or derivative
 - `base-devel` (includes makepkg)
 - Original ROM: `baserom.us.z64`, `baserom.eu.z64` or `baserom.jp.z64`
-
-## Quick start
-
-```bash
-git clone https://github.com/regalf/sm64ex-custom.git
-cd sm64ex-custom
-
-# Place your ROM
-cp /path/to/baserom.us.z64 ./
-
-# Interactive build (master)
-makepkg -si
-
-# Non-interactive build
-git checkout pkgbuild-no-interactive
-# Edit customization.cfg...
-makepkg -si
-
-# GUI builder (v3.0.0) — dynamic repo, install toggle, cross-compilation
-# Clone https://github.com/regalf/sm64ex-builder and run:
-python3 sm64ex-builder.py
-
-# Or download a standalone binary from the releases page
-./sm64ex-builder
-```

@@ -1,67 +1,25 @@
-# sm64ex-custom PKGBUILD
+# sm64ex-custom PKGBUILD (modular-experimental)
 
-A customized PKGBUILD for building Super Mario 64 PC Port with extensive customization options.
+A modular, non-interactive PKGBUILD for building Super Mario 64 PC Port with extensive
+customization options, including support for multiple game forks.
 
 ## About
 
-This PKGBUILD allows you to build the [sm64ex](https://github.com/sm64pc/sm64ex) port with numerous enhancements, patches, custom models, and texture packs. It's based on Brian Allred's original work from [sm64ex-custom](https://gitlab.com/BrianAllred/sm64ex-custom).
+This PKGBUILD allows you to build [sm64ex](https://github.com/sm64pc/sm64ex) and its forks
+with numerous enhancements, patches, custom models, and texture packs. It is:
+- **Fully non-interactive** — all options via `customization.cfg`
+- **Modular** — resources driven by `resources.db`, not hardcoded
+- **Multi-fork** — build from any sm64ex fork
 
-## Changes Made
+Based on [Brian Allred's sm64ex-custom](https://gitlab.com/BrianAllred/sm64ex-custom).
 
-This version includes several fixes and improvements over the original:
+## Features (modular-experimental)
 
-### Fixed Issues
-- **Updated all Discord CDN links** (`cdn.discordapp.com`) to permanent links on `sm64pc.info` for:
-  - All patch files (60fps, tight controls, captain toad, etc.)
-  - Model packs (HD Mario, Luigi, Bowser, Peach, etc.)
-  - Texture packs (mollymutt, owo, beta hud, etc.)
-- **Fixed syntax error** with `OPTIONS` variable (renamed to `_OPTIONS` to avoid conflict with makepkg's read-only variable)
-- **Fixed missing parameters** in `_download()` function calls (added `$_useCache` and `$_EXT_CACHE_PATH`)
-- **Fixed file extraction** commands (`.rar` → `.zip` where appropriate)
-- **Fixed inconsistent filenames** in download checks and extraction commands
-
-### Why Links Were Updated
-The original PKGBUILD used Discord CDN links which are:
-- **Not permanent** - files can become unavailable if messages are deleted
-- **Unreliable** - Discord servers can be deleted or archived
-- **Not suitable for packaging** - external dependencies should use stable hosting
-
-All links now point to `sm64pc.info` which hosts these files permanently.
-
-## Non-Interactive Branch
-
-The `pkgbuild-no-interactive` branch provides a stripped-down PKGBUILD with **no interactive menus**.
-It reads all options exclusively from `customization.cfg`, making it ideal for automated/scripted builds.
-
-```bash
-git checkout pkgbuild-no-interactive
-```
-
-Configure everything via `customization.cfg`:
-
-```bash
-_region=us
-_rom_path=/path/to/baserom.us.z64
-_useCache=1
-
-_bettercamera=1
-_60fps=1
-_external_data=1
-_mario_model=hd_mario
-_texture_pack=mollymutt
-_render_api=GL
-```
-
-No prompts will appear during the build — perfect for CI, scripts, or users who prefer
-declarative configuration over interactive menus.
-
-## Why not on AUR?
-
-This package is **not available on AUR** because:
-- It requires a **proprietary ROM file** (`baserom.{us,eu,jp}.z64`) which cannot be distributed
-- Many assets (models, textures, patches) are downloaded from third-party sources during build
-- The interactive build process doesn't fit AUR's non-interactive build philosophy
-- Several patches and mods have uncertain licensing status
+- **Modular PKGBUILD** — loop-based patch/model/texture handling via `customization.cfg`
+- **Dynamic game repo** — build from any fork via `_repo_url`/`_repo_branch` in config
+- **Smart branch switching** — `prepare()` detects repo/branch changes and re-clones automatically
+- **Flexible binary detection** — works with any fork's binary name (`sm64.us.*`, `sm64coopdx`, etc.)
+- **Compatible with sm64ex-builder GUI** — full support for the Python builder
 
 ## Prerequisites
 
@@ -75,7 +33,7 @@ This package is **not available on AUR** because:
 
 ```bash
 # Clone this repository
-git clone https://github.com/regaldragoon200/sm64ex-custom.git
+git clone -b modular-experimental https://github.com/regalf/sm64ex-custom.git
 cd sm64ex-custom
 
 # Place your ROM in the build directory
@@ -85,78 +43,56 @@ cp /path/to/your/baserom.us.z64 ./
 makepkg -si
 ```
 
+### Using customization.cfg
+
+```bash
+mkidr -p ~/.config/sm64ex-custom
+cp customization.cfg ~/.config/sm64ex-custom/config
+```
+
+Edit `customization.cfg` to configure patches, models, texture packs, and build options.
+No interactive menus will appear during the build.
+
 ### Building from a different fork
 
-This PKGBUILD supports building from any sm64ex fork. Set `_repo_url` and `_repo_branch`
-in `customization.cfg`:
+Set `_repo_url` and `_repo_branch` in `customization.cfg`:
 
 ```bash
 _repo_url="https://github.com/yourusername/sm64ex-fork.git"
 _repo_branch="your-branch"
 ```
 
-### Using customization.cfg
+The PKGBUILD will automatically switch to the configured fork during the build.
+Patches and resources from `resources.db` are designed for `sm64pc/sm64ex` and may
+not work correctly on other forks.
 
-Create a config file at `~/.config/sm64ex-custom/config` to pre-configure build options:
+## customization.cfg Reference
 
-```bash
-mkdir -p ~/.config/sm64ex-custom
-cp customization.cfg ~/.config/sm64ex-custom/config
-```
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `_repo_url` | `https://github.com/sm64pc/sm64ex.git` | Game source repository |
+| `_repo_branch` | `nightly` | Game source branch |
+| `_region` | `us` | Game region (us/eu/jp) |
+| `_patches` | `""` | Space-separated patch filenames from sm64pc.info |
+| `_hd_models` | `""` | Space-separated model filenames |
+| `_mario_model_file` | `default` | Mario model filename |
+| `_texture_pack` | `default` | Texture pack name |
+| `_target_bits` | `default` | Bitness (default/64/32) |
+| `_render_api` | `GL` | Render API (GL/GL_LEGACY/D3D11/D3D12) |
+| `_bettercamera` | `""` | Enable better camera |
+| `_external_data` | `""` | Load external data (required for texture packs) |
+| `_windows_build` | `""` | Cross-compile for Windows |
 
-Edit the config file to set your preferences:
+Full list of build options and available resources is in `customization.cfg` and `resources.db`.
 
-```bash
-# Example customization.cfg
-EXT_CONFIG_PATH=~/.config/sm64ex-custom/config
-EXT_CACHE_PATH=~/.config/sm64ex-custom/cache/
-_useCache=1
+## Why not on AUR?
 
-# Build options
-_bettercamera=1
-_debug=0
-_texture_fix=1
-_external_data=1
-
-# Patches
-_60fps=1
-_no_exit_star=1
-_tight_controls=1
-
-# Mario model (default, hd_mario, luigi, hat_kid, bow_kid, mawio, odyssey_mario, old_school_hd_mario, beta_mario)
-_mario_model=hd_mario
-
-# Texture pack (default, mollymutt, hypatia, sm64_redrawn, resrgan_16x, resrgan_n64, p3st, cleaner, owo, minecraft, jappawakka_admentus_hd, beta_hud)
-_texture_pack=mollymutt
-
-# Region (us, eu, jp)
-_region=us
-```
-
-## Build Options
-
-### Available Patches
-- 60 FPS
-- Better camera
-- Tight controls
-- Captain Toad stars
-- 3D coins
-- Exit course after 50 coins
-- Discord RPC
-- Time trials
-- Odyssey moveset
-- And many more!
-
-### Mario Models
-- Default, HD Mario, Luigi, Hat Kid, Bow Kid, Mawio, Odyssey Mario, Old School HD, Beta Mario
-
-### Texture Packs
-- MollyMutt's, Hypatia's, SM64 Redrawn, RESRGAN upscales, p3st, Cleaner, OwOify, Minecraft, JappaWakka & Admentus HD, Beta HUD
-
-## Original Repository
-
-This work is based on [Brian Allred's sm64ex-custom](https://gitlab.com/BrianAllred/sm64ex-custom).
+This package is **not available on AUR** because:
+- It requires a **proprietary ROM file** which cannot be distributed
+- Assets (models, textures, patches) are downloaded from third-party sources
+- Several patches and mods have uncertain licensing status
 
 ## License
 
-This PKGBUILD is provided as-is. The sm64ex source code and game assets belong to their respective owners. This project does not distribute any copyrighted content.
+This PKGBUILD is provided as-is. The sm64ex source code and game assets belong to
+their respective owners. This project does not distribute any copyrighted content.

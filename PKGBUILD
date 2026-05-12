@@ -506,14 +506,24 @@ package() {
     mkdir -p "${pkgdir}/opt"
     cp -r "$srcdir/$_gitname/build/${_region}_${_target}" "${pkgdir}/opt/sm64ex"
 
+    echo "Build output files:" >&2
+    ls -la "${pkgdir}/opt/sm64ex/" 2>&1 || echo "(empty)" >&2
+
     if [ "$_target" = "pc" ]; then
+        # Find the built binary (name varies by render API: sm64.us.f3dex2e, sm64.us.GL, etc.)
+        _sm64_exe=$(ls "${pkgdir}/opt/sm64ex/sm64.${_region}".* 2>/dev/null | head -1)
+        if [ -z "$_sm64_exe" ]; then
+            echo "WARNING: No sm64 binary found in build output! Build may have failed." >&2
+            ls -la "${pkgdir}/opt/sm64ex/" >&2
+            exit 1
+        fi
         if [ -e "$_where/win" ] || [ -e "$_where/win_gl" ]; then
-            install -Dm755 "${pkgdir}/opt/sm64ex/sm64.${_region}".* "${pkgdir}/opt/sm64ex/sm64ex.exe"
+            install -Dm755 "$_sm64_exe" "${pkgdir}/opt/sm64ex/sm64ex.exe"
         else
-            install -Dm755 "${pkgdir}/opt/sm64ex/sm64.${_region}".* "${pkgdir}/opt/sm64ex/sm64ex"
+            install -Dm755 "$_sm64_exe" "${pkgdir}/opt/sm64ex/sm64ex"
         fi
 
-        rm "${pkgdir}/opt/sm64ex/sm64.${_region}".*
+        rm -f "${pkgdir}/opt/sm64ex/sm64.${_region}".*
 
         mkdir -p "${pkgdir}/usr/bin"
 

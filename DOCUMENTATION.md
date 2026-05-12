@@ -87,6 +87,16 @@ _hd_models="hd_bowser.zip hd_koopa_the_quick.zip"
 - The Python builder can parse `resources.db` and generate the UI
   dynamically
 
+**Dynamic game repository:**
+- Supports building from **any sm64ex fork** via `_repo_url`/`_repo_branch`
+- `source()` uses `master` (always available), then switches branch in `prepare()`
+- Smart detection: if the URL or branch changes, it automatically re-clones
+
+**Flexible binary detection:**
+- `package()` first tries standard naming (`sm64.{region}.*`)
+- Falls back to `find -type f -executable` for custom forks (e.g. `sm64coopdx`)
+- Debug output (`ls -la`) before binary search for troubleshooting
+
 **Structure:**
 
 ```
@@ -100,11 +110,9 @@ pkgbuild/
 ```
 
 **When to use:** This branch is the **backend** of the Sm64exBuilder
-GUI — the builder handles `resources.db` updates and config generation
-automatically. **Not recommended for manual use without the builder.**
-
-> **Note:** This branch is designed to be driven exclusively by the
-> builder. Manual `makepkg -si` is not advised.
+GUI — the builder handles `resources.db` updates, config generation,
+and repo selection automatically. Manual `makepkg -si` is possible but
+not recommended.
 
 ```
 git checkout modular-experimental
@@ -161,6 +169,13 @@ _region=us                    # us, eu, jp
 _rom_path=/path/to/baserom.us.z64
 _useCache=1                   # Enable download cache
 _cleanCache=                  # Set to 1 to clear cache
+```
+
+**Dynamic game repository (modular-experimental only):**
+
+```bash
+_repo_url="https://github.com/sm64pc/sm64ex.git"   # Any sm64ex fork
+_repo_branch="nightly"                               # Branch to build from
 ```
 
 **Build options:**
@@ -252,16 +267,21 @@ PKGBUILD has been configured to use them (see `_configure_options()`).
 
 The graphical builder is now in a **separate repository**: [`github.com/regalf/sm64ex-builder`](https://github.com/regalf/sm64ex-builder)
 
-### Features (v2.0.0)
+### Features (v3.0.0)
 
 - 5-tab notebook GUI (General, Build Options, Patches, Models & Textures, Config)
 - Parses `resources.db` dynamically — no hardcoded resource lists
 - Search bars for patches and extra models
-- Generates `customization.cfg` and launches `makepkg -si` in a background thread
+- Generates `customization.cfg` and launches `makepkg -s` in a background thread
 - **Cross-platform**: runs on Linux natively and on **Windows via MSYS2**
-- **Output Directory** — automatically copies built game files (binary + `res/`) to a folder of your choice
+- **Dynamic game repository**: select any sm64ex fork (`user/repo`) and branch from the GUI
+- **Output Directory** — automatically copies built game files (binary + `res/`) to `Sm64-Compiled/` subfolder
 - **Clean up after build** — removes `src/`, `pkg/`, and package files
-- **Install Dependencies** button — installs all required packages (pacman on Linux / pacman inside MSYS2 on Windows)
+- **Delete project directory** — removes project folder with double-confirmation and `pkexec` fallback
+- **Install Dependencies** button — installs all required packages (uses `pkexec` on Linux for privilege elevation)
+- **Install toggle** — optionally install the built package system-wide after build (Linux: `pkexec pacman -U`, Windows: MSYS2 `pacman -U`)
+- **D3D warning** — warns when D3D11/D3D12 is selected on Linux, auto-enables Windows Build
+- **Cross-compilation** — when Windows Build is ON on Linux, forces Bitness to 64 and auto-installs mingw-w64 deps
 - Live output console with real-time build logging
 - `--reset` flag to clear all settings (`~/.config/sm64ex-builder/`)
 - Backend: uses the `modular-experimental` branch of this repo
@@ -291,12 +311,16 @@ python3 sm64ex-builder.py
 ```
 python-wxpython  git  base-devel
 ```
+For Windows cross-compilation (Windows Build ON): additional packages `mingw-w64-gcc`,
+`mingw-w64-crt`, `mingw-w64-headers` (official — auto-installed).
+`mingw-w64-glew` and `mingw-w64-sdl2` are AUR-only (manual install: `yay -S mingw-w64-glew mingw-w64-sdl2`).
 
 **Windows (MSYS2/Mingw64):**
 ```
 mingw-w64-x86_64-python  mingw-w64-x86_64-wxPython  mingw-w64-x86_64-SDL2
 mingw-w64-x86_64-glew    mingw-w64-x86_64-toolchain  base-devel  git
 ```
+Requires [Microsoft Visual C++ Redistributable](https://aka.ms/vcredist) (x64) for the standalone `.exe`.
 
 ### Build from source (standalone binary)
 
@@ -326,6 +350,10 @@ on `sm64pc.info` (patches, models, textures).
 - `.rar` files converted to `.zip`
 - `${_EXT_CACHE_PATH:?}` crashed when unset — added defaults and `-n`
   check
+- **Flexible binary detection**: `package()` uses `find` as fallback
+  for custom fork binaries (e.g. `sm64coopdx`)
+- **Dynamic repo support**: `source()` uses `master` for reliable clone,
+  then switches to the configured branch in `prepare()`
 
 ### Why not on AUR
 
@@ -359,7 +387,10 @@ git checkout pkgbuild-no-interactive
 # Edit customization.cfg...
 makepkg -si
 
-# GUI builder (see Builder GUI section below)
+# GUI builder (v3.0.0) — dynamic repo, install toggle, cross-compilation
 # Clone https://github.com/regalf/sm64ex-builder and run:
 python3 sm64ex-builder.py
+
+# Or download a standalone binary from the releases page
+./sm64ex-builder
 ```

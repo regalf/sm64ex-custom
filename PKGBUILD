@@ -441,8 +441,9 @@ prepare() {
 
     # ---- Dynamic game repo: switch URL/branch now, before _configure_options ----
     if git -C "$srcdir/$_gitname" rev-parse --git-dir &>/dev/null; then
-        _existing_url=$(cd "$srcdir/$_gitname" && git remote get-url origin 2>/dev/null || true)
-        echo "DEBUG: srcdir=$srcdir _gitname=$_gitname url=$_existing_url" >&2
+        _existing_url=$(GIT_DIR="$srcdir/$_gitname/.git" git remote get-url origin 2>/dev/null || true)
+        _git_config_url=$(grep -A2 'remote "origin"' "$srcdir/$_gitname/.git/config" 2>/dev/null | grep 'url = ' | sed 's/.*= //' || true)
+        echo "DEBUG: srcdir=$srcdir _gitname=$_gitname url=$_existing_url config_url=$_git_config_url" >&2
         _existing_repo=$(echo "$_existing_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
         _config_repo=$(echo "$_repo_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
         if [ "$_existing_repo" != "$_config_repo" ]; then
@@ -454,7 +455,7 @@ prepare() {
             rm -rf "$_gitname"
             git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$_gitname"
         else
-            _current_branch=$(cd "$srcdir/$_gitname" && git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+            _current_branch=$(GIT_DIR="$srcdir/$_gitname/.git" git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
             if [ "$_current_branch" != "$_repo_branch" ]; then
                 echo "Switching to branch $_repo_branch..." >&2
                 cd "$srcdir/$_gitname"

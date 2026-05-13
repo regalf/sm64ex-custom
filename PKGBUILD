@@ -440,28 +440,27 @@ prepare() {
     _repo_branch="${_repo_branch:-nightly}"
 
     # ---- Dynamic game repo: switch URL/branch now, before _configure_options ----
-    if git -C "$srcdir/$_gitname" rev-parse --git-dir &>/dev/null; then
-        _existing_url=$(GIT_DIR="$srcdir/$_gitname/.git" git remote get-url origin 2>/dev/null || true)
-        _git_config_url=$(grep -A2 'remote "origin"' "$srcdir/$_gitname/.git/config" 2>/dev/null | grep 'url = ' | sed 's/.*= //' || true)
-        echo "DEBUG: srcdir=$srcdir _gitname=$_gitname url=$_existing_url config_url=$_git_config_url" >&2
-        _existing_repo=$(echo "$_existing_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
-        _config_repo=$(echo "$_repo_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
-        if [ "$_existing_repo" != "$_config_repo" ]; then
-            echo "WARNING: Game repository changed" >&2
-            echo "  cached: $_existing_repo" >&2
-            echo "  config: $_config_repo ($_repo_branch)" >&2
-            echo "Re-cloning from configured URL..." >&2
-            cd "$srcdir" 2>/dev/null || cd "$_where"
-            rm -rf "$_gitname"
-            git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$_gitname"
-        else
-            _current_branch=$(GIT_DIR="$srcdir/$_gitname/.git" git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
-            if [ "$_current_branch" != "$_repo_branch" ]; then
-                echo "Switching to branch $_repo_branch..." >&2
-                cd "$srcdir/$_gitname"
-                git fetch origin "$_repo_branch" 2>/dev/null || true
-                git checkout "$_repo_branch" 2>/dev/null || true
-            fi
+    # Note: makepkg's working copy in $srcdir/ may have origin pointing to a
+    # local bare cache path instead of the original URL. So instead of reading
+    # the git remote, we compare the configured _repo_url against the hardcoded
+    # source=() URL from the PKGBUILD.
+    _config_repo=$(echo "$_repo_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
+    _default_repo="sm64pc/sm64ex"
+    if [ "$_config_repo" != "$_default_repo" ]; then
+        echo "WARNING: Game repository changed" >&2
+        echo "  source: $_default_repo" >&2
+        echo "  config: $_config_repo ($_repo_branch)" >&2
+        echo "Re-cloning from configured URL..." >&2
+        cd "$srcdir" 2>/dev/null || cd "$_where"
+        rm -rf "$_gitname"
+        git clone --branch "$_repo_branch" --single-branch "$_repo_url" "$_gitname"
+    elif git -C "$srcdir/$_gitname" rev-parse --git-dir &>/dev/null; then
+        _current_branch=$(GIT_DIR="$srcdir/$_gitname/.git" git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+        if [ "$_current_branch" != "$_repo_branch" ]; then
+            echo "Switching to branch $_repo_branch..." >&2
+            cd "$srcdir/$_gitname"
+            git fetch origin "$_repo_branch" 2>/dev/null || true
+            git checkout "$_repo_branch" 2>/dev/null || true
         fi
     fi
 

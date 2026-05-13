@@ -21,7 +21,7 @@ provides=(sm64ex)
 
 _gitname=sm64ex
 
-source=('git+https://github.com/sm64pc/sm64ex.git#branch=master')
+source=('git+https://github.com/sm64pc/sm64ex.git#branch=nightly')
 sha256sums=('SKIP')
 
 _where="$PWD"
@@ -440,12 +440,14 @@ prepare() {
     _repo_branch="${_repo_branch:-nightly}"
 
     # ---- Dynamic game repo: switch URL/branch now, before _configure_options ----
-    if [ -d "$srcdir/$_gitname/.git" ]; then
+    if git -C "$srcdir/$_gitname" rev-parse --git-dir &>/dev/null; then
         _existing_url=$(git -C "$srcdir/$_gitname" remote get-url origin 2>/dev/null || true)
-        if [ "$_existing_url" != "$_repo_url" ]; then
+        _existing_repo=$(echo "$_existing_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
+        _config_repo=$(echo "$_repo_url" | sed 's|.*github\.com[/:]||; s|\.git$||')
+        if [ "$_existing_repo" != "$_config_repo" ]; then
             echo "WARNING: Game repository changed" >&2
-            echo "  cached: $_existing_url" >&2
-            echo "  config: $_repo_url ($_repo_branch)" >&2
+            echo "  cached: $_existing_repo" >&2
+            echo "  config: $_config_repo ($_repo_branch)" >&2
             echo "Re-cloning from configured URL..." >&2
             cd "$srcdir"
             rm -rf "$_gitname"

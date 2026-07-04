@@ -7,7 +7,7 @@ This repository contains custom PKGBUILDs for building
 patches, HD models, texture packs, and build options. Based on the work of
 [Brian Allred](https://gitlab.com/BrianAllred/sm64ex-custom).
 
-Repository: `https://github.com/regalf/sm64ex-custom` (private)
+Repository: `https://github.com/regalf/sm64ex-custom`
 
 ---
 
